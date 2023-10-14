@@ -48,4 +48,4 @@ accelerate configuration saved at /home/tyler/.cache/huggingface/accelerate/defa
 
 # TODOs
 - This file lmao
-- Add previews and model checkpoints for DCGAN (Similar to how the diffusion model does it).
+- Add previews for DCGAN (Similar to how the diffusion model does it).

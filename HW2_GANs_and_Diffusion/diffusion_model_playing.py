@@ -7,48 +7,56 @@ import torchvision.utils as vutils
 import torch
 import tqdm
 import cv2
+import yaml
+import os
 from colorama import Fore
 from colorama import Style
 
-
-sample_steps = 20
+sample_steps = 50
 data_path = './data/BRICKS_colorful_final'
-model_dir = './results_colorful_final'
+results_path = './results_colorful_final'
 checkpoint_num = '100'
 
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+with open(os.path.join(results_path, 'config.yaml'), "r") as f:
+    parameters = yaml.load(f, Loader=yaml.FullLoader)
+    print(parameters)
+# %%
 
 model = Unet(
-    dim = 64,
-    dim_mults = (1, 2, 4, 8),
-    flash_attn = True
+    dim = parameters['unet']['dim'],
+    dim_mults = parameters['unet']['dim_mults'],
+    flash_attn = parameters['unet']['flash_attn'] 
 )
 
 diffusion = GaussianDiffusion(
     model,
-    image_size = 64,
-    timesteps = 1000,           # number of steps
+    image_size = parameters['diffusion']['image_size'],
+    timesteps = parameters['diffusion']['timesteps'],           # number of steps
     sampling_timesteps = sample_steps    # number of sampling timesteps (using ddim for faster inference [see citation for ddim paper])
 )
 
 trainer = Trainer(
     diffusion,
     data_path,
-    train_batch_size = 32,
-    train_lr = 8e-5,
-    train_num_steps = 1000,         # total training steps
-    gradient_accumulate_every = 2,    # gradient accumulation steps
-    ema_decay = 0.995,                # exponential moving average decay
-    amp = True,                       # turn on mixed precision
-    calculate_fid = False, # whether to calculate fid during training
-    results_folder = model_dir       # folder to save results
+    train_batch_size = parameters['trainer']['train_batch_size'],
+    train_lr = parameters['trainer']['train_lr'],
+    train_num_steps = parameters['trainer']['train_num_steps'],         # total training steps
+    gradient_accumulate_every = parameters['trainer']['gradient_accumulate_every'],    # gradient accumulation steps
+    ema_decay = parameters['trainer']['ema_decay'],                # exponential moving average decay
+    amp = parameters['trainer']['amp'],                       # turn on mixed precision
+    calculate_fid = parameters['trainer']['calculate_fid'], # whether to calculate fid during training
+    results_folder = results_path       # folder to save results
 )
 
-trainer.load(checkpoint_num)
+
+if checkpoint_num:
+    trainer.load(checkpoint_num)
 
 
-def show_multiple(imgs):
-    npimg = vutils.make_grid(imgs, padding=2, nrow=10)
+def show_multiple(imgs, nrows=10):
+    npimg = vutils.make_grid(imgs, padding=2, nrow=nrows)
     npimg = npimg.numpy()
     plt.axis("off")
     plt.imshow(np.transpose(npimg, (1,2,0)), interpolation='nearest')
@@ -106,36 +114,67 @@ def ddim_sample(model, noise, return_all_timesteps = False):
     torch.cuda.empty_cache()
     return ret
 
+def generate_img(noise):
+    if noise.shape == (3, 64, 64):
+        noise = noise.unsqueeze(0)
+    elif noise.shape != (1, 3, 64, 64):
+        raise ValueError(f"noise must be in the shape of (1, 3, 64, 64) or (3, 64, 64)\nnoise is shape: {noise.shape}")
+    n = noise.to(device)
+    img = ddim_sample(diffusion, n, return_all_timesteps=False).detach().cpu()
+    del n
+    torch.cuda.empty_cache()
+    return img
+
+def generate_imgs(noises):
+    imgs = []
+    for n in noises:
+        imgs.append(generate_img(n))
+    return torch.vstack(imgs)
+
+
 
 # %%==========================================================================-
-print(f"{Fore.GREEN}Here is one randomly generated sample")
-sampled_images = diffusion.sample(batch_size = 1, return_all_timesteps=False)
-show_one(sampled_images[0].detach().cpu())
-
+print(f"{Fore.GREEN}Here is a couple randomly generated samples")
+imgs = []
+for _ in range(9):
+    sampled_images = diffusion.sample(batch_size = 1, return_all_timesteps=False)
+    imgs.append(sampled_images[0].detach().cpu())
+show_multiple(imgs, nrows=3)
+del imgs
+torch.cuda.empty_cache()
 
 # %%==========================================================================-
 print(f"{Fore.GREEN}Here is the interpolation between these two randomly generated samples below")
 torch.manual_seed(0)
-noise1 = torch.randn((1, 3, 64, 64), device=device)
-noise2 = torch.randn((1, 3, 64, 64)).to(device)
+noise1 = torch.randn((1, 3, 64, 64))
+noise2 = torch.randn((1, 3, 64, 64))
 
-sampled_images = torch.stack([ddim_sample(diffusion, noise1, return_all_timesteps=False).detach().cpu()[0],
-                              ddim_sample(diffusion, noise2, return_all_timesteps=False).detach().cpu()[0]])
-show_multiple(sampled_images.detach().cpu())
-
-img_list = []
-steps = 10
-for i in range(steps):
-    interp_noise = torch.lerp(noise1, noise2, i/(steps-1))
-    sampled_images = ddim_sample(diffusion, interp_noise, return_all_timesteps=False)
-    img_list.append(sampled_images[0].detach().cpu())
-del interp_noise
-torch.cuda.empty_cache()
-sampled_images = torch.stack(img_list).detach().cpu()
-del img_list
-torch.cuda.empty_cache()
+sampled_images = generate_imgs([noise1, noise2])
 show_multiple(sampled_images)
 
+steps = 10
+sampled_images = generate_imgs([torch.lerp(noise1, noise2, i/(steps-1)) for i in range(steps)])
+show_multiple(sampled_images)
+
+# %%==========================================================================-
+print(f"{Fore.GREEN}Here is the interpolation between 4 randomly generated samples")
+
+torch.manual_seed(1337)
+
+steps = 10
+noise1, noise2, noise3, noise4 = torch.randn((4, 3, 64, 64), device="cpu")
+
+n1_2 = torch.stack([torch.lerp(noise1, noise2, i/(steps-1)) for i in range(steps)])
+n3_4 = torch.stack([torch.lerp(noise3, noise4, i/(steps-1)) for i in range(steps)])
+
+n1_2_3_4 = []
+for j in range(n1_2.shape[0]):
+    interp_step = torch.stack([torch.lerp(n1_2[j], n3_4[j], i/(steps-1)) for i in range(steps)])
+    n1_2_3_4.append(interp_step)
+n1_2_3_4 = torch.vstack(n1_2_3_4)
+
+sampled_images = generate_imgs(n1_2_3_4)
+show_multiple(sampled_images, nrows=steps)
 
 # %%==========================================================================-
 def make_noise_images(seed, noise_vectors=20):
@@ -172,5 +211,5 @@ def get_video_from_interpolations_forall_images(filename, frame_size=(64, 64), f
 
   video_writer.release()
 
-get_video_from_interpolations_forall_images('aaaa.mp4', fps=12, noise_vectors=10, steps=20)
+get_video_from_interpolations_forall_images('diffusion_interpolation.mp4', fps=30, noise_vectors=10, steps=100)
 # %%
