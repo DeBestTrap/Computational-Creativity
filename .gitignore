@@ -21,3 +21,13 @@ vae-lego.gif
 # HW2: GAN
 models
 results*
+
+# HW3: LLMs
+food101_data
+
+# Other
+zeroscope_v2_576w/
+StyleRF/
+stable-dreamfusion/
+threestudio/
+3dsnet/
