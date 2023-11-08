@@ -24,6 +24,7 @@ results*
 
 # HW3: LLMs
 food101_data
+wandb
 
 # Other
 zeroscope_v2_576w/
