@@ -16,5 +16,3 @@ DCGAN and DDPM models
 
 # HW3 LLMs
 LLaMA-2 finetuning with custom dataset
-
-2
