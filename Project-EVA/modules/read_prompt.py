@@ -47,22 +47,28 @@ def parse_json(data):
             text = dialogue['text']
             # TBI
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--prompt', 
-                    type=str, 
-                    help="PATH to the prompt, which is the path to a .json file",
-                    required=True)
+def read_prompt(prompt):
+    """ Read the prompt and return the generated content """
+    # read the prompt and generate the content
+    with open(prompt, "r") as file:
+        prompts = json.load(file)
 
-args = parser.parse_args()
+    try:
+        valid = validate_json(prompts)
+        if not valid:
+            raise SystemExit()
 
-with open(args.prompt, "r") as file:
-    prompts = json.load(file)
+    except SystemExit:
+        print('the .json file failed to validate correctly. Check to see if the generated content is correct with the validation step.')
 
 
-try:
-  valid = validate_json(prompts)
-  if not valid:
-    raise SystemExit()
-except SystemExit:
-  print('the .json file failed to validate correctly. Check to see if the generated content is correct with the validation step.')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--prompt', 
+                        type=str, 
+                        help="PATH to the prompt, which is the path to a .json file",
+                        required=True)
 
+    args = parser.parse_args()
+
+    read_prompt(args.prompt)
