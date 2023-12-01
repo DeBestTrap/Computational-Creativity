@@ -1,0 +1,3 @@
+video_generator:
+  fps: 6
+  audio_sampling_rate: 22050
