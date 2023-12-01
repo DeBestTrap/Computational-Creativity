@@ -27,6 +27,12 @@ results*
 food101_data
 wandb
 
+# EVA
+generative-models/
+vits/
+audio.wav
+output.mp4
+
 # Other
 zeroscope_v2_576w/
 StyleRF/
