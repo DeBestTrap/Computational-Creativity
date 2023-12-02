@@ -30,7 +30,7 @@ wandb
 # EVA
 generative-models/
 vits/
-audio.wav
+audio*.wav
 output.mp4
 checkpoints/
 outputs/

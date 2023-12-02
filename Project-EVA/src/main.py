@@ -3,7 +3,6 @@ from eva_modules.read_prompt import *
 from eva_modules.speech import *
 from eva_modules.video import *
 import time
-import torch
 
 import torch
 from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, concatenate_audioclips, CompositeVideoClip
@@ -18,6 +17,7 @@ def pipeline(
     img_prompts:List[str],
     tts_captions:List[str],
     speakers:List[str] = None,
+    seed:int=69,
     device:str = "cuda" if torch.cuda.is_available() else "cpu"
 ):
     '''
@@ -37,7 +37,7 @@ def pipeline(
 
     # get TTS
     # TODO change this for speaker selection
-    net_g, hps = get_tts("./vits/configs/vctk_base.json", "./vits/models/pretrained_vctk.pth") 
+    net_g, hps = get_tts_model("./vits/configs/vctk_base.json", "./vits/models/pretrained_vctk.pth") 
 
     # define vars
     # TODO get this from type of SVD model
@@ -54,7 +54,7 @@ def pipeline(
     generations = []
     for i, text in enumerate(tts_captions):
         # generate audio from text
-        wav = tts(text, hps, net_g)
+        wav = text2speech(text, hps, net_g)
         sf.write(f'audio{i}.wav', wav, sampling_rate) 
 
         # generate sufficently long video from audio
@@ -93,36 +93,18 @@ if __name__ == "__main__":
                         type=str, 
                         help="PATH to the prompt, which is the path to a .json file",
                         required=True)
+    parser.add_argument('--seed',
+                        type=int,
+                        help="Seed for the random number generators",
+                        default=69)
 
     args = parser.parse_args()
 
-    read_prompt(args.prompt)
+    captions, dialogues, characters = read_prompt(args.prompt)
 
+    s = time.perf_counter()
+    pipeline(captions, dialogues, seed=args.seed, device=device)
+    e = time.perf_counter()
+    print(f"Time elapsed: {e-s} seconds")
 
-    # svc()
-
-    # prompts = ["A sheep with a gold chain around its neck is standing in a field."]
-    # images = txt2img(prompts, device=device)
-    # sample(images, version="svd_xt")
-
-    # time.sleep(10)
-    # txt2img()
-
-    # text = "Hello world! My name is Zhi Zheng."
-    # text = "My name is Walter Hartwell White"
-    # text = "The significance of this paper lies in its efforts to mitigate a fundamental flaw in deep learning models: their vulnerability to adversarial attacks."
-    # texts = [
-    #     "Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng.",
-    #     "Through the rise of image processing through machine learning, adversarial attacks prove to be a threat to the robustness of models.",
-    #     "This paper examines a novel purification technique that leverages the robustness of diffusion and model attention.",
-    #     "Hi my name is Zhi Zheng.",
-    #     "We apply inpainting to the attention map of a high layer representation of the model in order to effectively target an area to diffuse.",
-    #     "This provides a more effective way to purify an attacked image by generalizing the dimensions of which the model classifies.",
-    #     "Through experimentation we provide applicable methods that effectively eliminate adversarial attacks."
-    # ] * a
-    # testing()
-
-    captions, dialogues, characters = parse_json(args.prompt)
-
-    # samples = txt2vid("", num_images=2, device=device)
-    pipeline(captions, dialogues, device=device)
+# %%

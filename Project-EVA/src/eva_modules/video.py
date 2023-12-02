@@ -1,38 +1,12 @@
 from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 import torch
 from typing import Optional, List
-from PIL import Image
-
-def txt2img(prompts:List[str], device:str):
-    '''
-    SD
-    returns img
-    '''
-    model_id = "stabilityai/stable-diffusion-2-1-base"
-
-    scheduler = EulerDiscreteScheduler.from_pretrained(model_id, subfolder="scheduler")
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, scheduler=scheduler, torch_dtype=torch.float16)
-    pipe = pipe.to(device)
-
-    images = []
-    for prompt in prompts:
-        image = pipe(prompt).images[0]  
-        images.append(image)
-    # del pipe, scheduler
-    return images
-
 
 import math
-import os
-from glob import glob
-from pathlib import Path
 from typing import Optional
 
-import cv2
-import numpy as np
 import torch
 from einops import rearrange, repeat
-from fire import Fire
 from omegaconf import OmegaConf
 import PIL.Image
 from torchvision.transforms import ToTensor
@@ -43,13 +17,36 @@ from tqdm import tqdm
 from sgm.inference.helpers import embed_watermark
 from sgm.util import default, instantiate_from_config
 
+def txt2img(prompts:List[str],
+            model:str = "stabilityai/stable-diffusion-2-1-base",
+            loras:List[str] = None,
+            seed:int = 69,
+            device:str = "cuda",
+):
+    '''
+    SD
+    returns img
+    '''
+    scheduler = EulerDiscreteScheduler.from_pretrained(model, subfolder="scheduler")
+    pipe = StableDiffusionPipeline.from_pretrained(model, scheduler=scheduler, torch_dtype=torch.float16)
+    pipe = pipe.to(device)
+
+
+    images = []
+    for i, prompt in enumerate(prompts):
+        generator = torch.Generator(device="cuda").manual_seed(seed+i) 
+        image = pipe(prompt, generator=generator).images[0]  
+        images.append(image)
+    # del pipe, scheduler
+
+    return images
+
 
 def img2vid(
-    # input_path: str = "assets/test_image.png",  # Can either be image file or folder with image files
     input_imgs: List[PIL.Image.Image],
     num_frames: Optional[int] = None,
     num_steps: Optional[int] = None,
-    version: str = "svd",
+    version: str = "svd_xt",
     fps_id: int = 6,
     motion_bucket_id: int = 127,
     cond_aug: float = 0.02,
@@ -58,7 +55,6 @@ def img2vid(
     device: str = "cuda",
     output_folder: Optional[str] = None,
     num_continuous_samples: List[int] = None,
-    # num_continuous_samples: int = 1,
 ):
     """
     Simple script to generate a single sample conditioned on an image `input_path` or multiple images, one for each
@@ -225,6 +221,7 @@ def img2vid(
 
     return videos
 
+
 def get_unique_embedder_keys_from_conditioner(conditioner):
     return list(set([x.input_key for x in conditioner.embedders]))
 
@@ -296,8 +293,12 @@ def load_model(
     filter = lambda x: x
     return model, filter
 
+
 def txt2vid(prompts: List[str],
             generations: List[int] = None,
+            sd_model: str = "stabilityai/stable-diffusion-2-1-base",
+            svd_model: str = "svd_xt",
+            seed: int = 69,
             device = "cuda"
 ):
     '''
@@ -307,6 +308,6 @@ def txt2vid(prompts: List[str],
     if generations is None:
         generations = [1]*len(prompts)
 
-    images = txt2img(prompts, device=device)
-    samples = img2vid(images, version="svd_xt", num_continuous_samples=generations, device=device)
+    images = txt2img(prompts, model=sd_model, seed=seed, device=device)
+    samples = img2vid(images, version=svd_model, num_continuous_samples=generations, seed=seed, device=device)
     return samples
