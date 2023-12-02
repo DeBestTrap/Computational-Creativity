@@ -1,4 +1,5 @@
 from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+from diffusers import StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
 import torch
 from typing import Optional, List
 
@@ -24,15 +25,25 @@ def txt2img(prompts:List[str],
     SD
     returns img
     '''
+    torch.cuda.set_device(1)
+
+    # SDXL
+    # pipe = StableDiffusionXLPipeline.from_pretrained(
+    #     "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True
+    # ).to(device)
+
+    # refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
+    #     "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16"
+    # ).to("cuda")
+
     scheduler = EulerDiscreteScheduler.from_pretrained(model, subfolder="scheduler")
     pipe = StableDiffusionPipeline.from_pretrained(model, scheduler=scheduler, torch_dtype=torch.float16)
     pipe = pipe.to(device)
 
-
     images = []
     for i, prompt in enumerate(prompts):
         generator = torch.Generator(device="cuda").manual_seed(seed+i) 
-        image = pipe(prompt, generator=generator).images[0]  
+        image = pipe(prompt, height=576, width=1024, generator=generator).images[0]  
         images.append(image)
 
     # del pipe, scheduler

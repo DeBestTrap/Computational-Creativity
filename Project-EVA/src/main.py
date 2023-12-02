@@ -19,8 +19,6 @@ def pipeline(
     music_path = None
 ):
     '''
-    TODO implement svc for speakers
-
     tts_captions -> [VITS] -> wavs
     img_prompts -> [SD] -> imgs -> [SVD] -> videos
     wavs + videos -> final video
@@ -35,8 +33,7 @@ def pipeline(
     with open("config.yaml") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     sampling_rate = config['video_generator']['audio_sampling_rate']
-    # TODO get this from type of SVD model
-    fps = config['video_generator']['fps']
+    fps = config['video_generator']['fps'] # TODO get this from type of SVD model
     vits_model = config['models']['vits']
     sd_model = config['models']['sd']
     svd_model = config['models']['svd']
@@ -63,7 +60,13 @@ def pipeline(
         generations.append(num_generations)
     del net_g, hps
 
-    # TODO add sovitssvc for speaker selection
+    # make all the audios the speaker
+    for i, speaker in enumerate(speakers):
+        if speaker != "default":
+            if speaker.lower() not in map(lambda x: x.lower(), get_models()["so-vits-svc"]):
+                print(f"Speaker {speaker} not found. Using default TTS. Use --listmodels to see available models.")
+                continue
+            speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
 
     # get clips
     videos = txt2vid(img_prompts, generations, sd_model, svd_model, seed=seed, device=device)
@@ -104,6 +107,7 @@ def pipeline(
 def get_models(print_models=False):
     '''
     returns a dict of models
+    TODO add checking for sd and svd model is in this list
     '''
     models_path = Path("./models/")
     all_models = {}
@@ -149,7 +153,7 @@ if __name__ == "__main__":
     captions, dialogues, characters = read_prompt(args.prompt)
 
     s = time.perf_counter()
-    pipeline(captions, dialogues, music_path=args.music, seed=args.seed, device=device)
+    pipeline(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
     e = time.perf_counter()
     print(f"Time elapsed: {e-s} seconds")
 

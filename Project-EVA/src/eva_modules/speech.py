@@ -55,7 +55,7 @@ from so_vits_svc_fork.inference.main import infer
 from pathlib import Path
 import json
 
-def speech2speech(model, config_key:str="Default VC (GPU, GTX 1060)"):
+def speech2speech(model, input_path, output_path, config_key:str="Default File"):
     '''
     makes waveform sound like the model's voice
 
@@ -66,13 +66,13 @@ def speech2speech(model, config_key:str="Default VC (GPU, GTX 1060)"):
         Default VC (Crooning)
         Default File
 
-    returns ??
+    returns nothing
     '''
-    input_path = Path("input")
-    output_path = Path("output")
-    model_path = Path("models")
+    # input_path = "test/"
+    # output_path = "test.out/"
+    model_path = Path(f"models/so-vits-svc/{model}.pth")
+    config_path = Path(f"configs/so-vits-svc/{model}.json")
     presets = json.load(open("default_gui_presets.json"))[config_key]
-    return
     infer(
         model_path=model_path,
         output_path=output_path,
@@ -80,10 +80,12 @@ def speech2speech(model, config_key:str="Default VC (GPU, GTX 1060)"):
         config_path=config_path,
         recursive=True,
         # svc config
-        speaker=presets["speaker"],
-        cluster_model_path=Path(presets["cluster_model_path"])
-        if presets["cluster_model_path"]
-        else None,
+        speaker=0,
+        # speaker=presets["speaker"],
+        cluster_model_path=None,
+        # cluster_model_path=Path(presets["cluster_model_path"])
+        # if presets["cluster_model_path"]
+        # else None,
         transpose=presets["transpose"],
         auto_predict_f0=presets["auto_predict_f0"],
         cluster_infer_ratio=presets["cluster_infer_ratio"],
@@ -96,6 +98,22 @@ def speech2speech(model, config_key:str="Default VC (GPU, GTX 1060)"):
         absolute_thresh=presets["absolute_thresh"],
         max_chunk_seconds=presets["max_chunk_seconds"],
         device="cpu"
-        if not presets["use_gpu"]
+        if not True
         else get_optimal_device(),
     )
+
+def get_optimal_device(index: int = 0) -> torch.device:
+    if torch.cuda.is_available():
+        return torch.device(f"cuda:{index % torch.cuda.device_count()}")
+    elif torch.backends.mps.is_available():
+        return torch.device("mps")
+    else:
+        try:
+            import torch_xla.core.xla_model as xm  # noqa
+
+            if xm.xrt_world_size() > 0:
+                return torch.device("xla")
+            # return xm.xla_device()
+        except ImportError:
+            pass
+    return torch.device("cpu")
