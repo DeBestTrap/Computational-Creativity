@@ -39,6 +39,7 @@ from text import text_to_sequence
 # from vits.text.symbols import symbols
 # from vits.text import text_to_sequence
 
+
 def get_text(text, hps):
     text_norm = text_to_sequence(text, hps.data.text_cleaners)
     if hps.data.add_blank:

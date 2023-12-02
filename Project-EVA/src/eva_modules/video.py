@@ -77,6 +77,7 @@ def sample(
     decoding_t: int = 1,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
     device: str = "cuda",
     output_folder: Optional[str] = None,
+    # num_continuous_samples: List[int] = None,
     num_continuous_samples: int = 1,
 ):
     """
@@ -85,6 +86,8 @@ def sample(
     """
     print(f"decoding_t: {decoding_t}")
     torch.cuda.set_device(1)
+    # if num_continuous_samples is None:
+    #     num_continuous_samples = [1] * len(input_imgs)
 
     if version == "svd":
         num_frames = default(num_frames, 14)
@@ -120,8 +123,9 @@ def sample(
         num_steps,
     )
     torch.manual_seed(seed)
+    videos = []
 
-    for image in input_imgs:
+    for i, image in enumerate(input_imgs):
         w, h = image.size
 
         if h % 64 != 0 or w % 64 != 0:
@@ -164,6 +168,7 @@ def sample(
         samples = torch.empty((0,) + image.shape[1:], device=device)
 
         for _ in range(num_continuous_samples):
+        # for _ in range(num_continuous_samples[i]):
             with torch.no_grad():
                 with torch.autocast(device):
                     batch, batch_uc = get_batch(
@@ -210,28 +215,32 @@ def sample(
                     value_dict["cond_frames_without_noise"] = image
                     value_dict["cond_frames"] = image + cond_aug * torch.randn_like(image)
 
-        os.makedirs(output_folder, exist_ok=True)
-        base_count = len(glob(os.path.join(output_folder, "*.mp4")))
-        video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
-        writer = cv2.VideoWriter(
-            video_path,
-            cv2.VideoWriter_fourcc(*"MP4V"),
-            fps_id + 1,
-            (samples.shape[-1], samples.shape[-2]),
-        )
+        # os.makedirs(output_folder, exist_ok=True)
+        # base_count = len(glob(os.path.join(output_folder, "*.mp4")))
+        # video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
+        # writer = cv2.VideoWriter(
+        #     video_path,
+        #     cv2.VideoWriter_fourcc(*"MP4V"),
+        #     fps_id + 1,
+        #     (samples.shape[-1], samples.shape[-2]),
+        # )
 
         samples = embed_watermark(samples)
-        samples = filter(samples)
-        vid = (
-            (rearrange(samples, "t c h w -> t h w c") * 255)
-            .cpu()
-            .numpy()
-            .astype(np.uint8)
-        )
-        for frame in vid:
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            writer.write(frame)
-        writer.release()
+        videos.append(samples)
+        # samples = filter(samples)
+        # vid = (
+        #     (rearrange(samples, "t c h w -> t h w c") * 255)
+        #     .cpu()
+        #     .numpy()
+        #     .astype(np.uint8)
+        # )
+        # for frame in vid:
+        #     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        #     writer.write(frame)
+        # writer.release()
+        return samples
+
+    return videos
 
 
 def get_unique_embedder_keys_from_conditioner(conditioner):
@@ -307,11 +316,18 @@ def load_model(
     filter = lambda x: x
     return model, filter
 
-def txt2vid():
+def txt2vid(prompts, num_images=1, generations=None, device="cuda"):
     '''
     SD
     returns video
     '''
-    # img = txt2img()
-    # sample()
-    pass
+    # if generations is None:
+    #     generations = [1]*num_images
+
+    prompts = ["A sheep with a gold chain around its neck is standing in a field."]*num_images
+    images = txt2img(prompts, device=device)
+    # for i in range(len(images)):
+    #     images[i] = images[i].resize((1024, 576))
+    # samples = sample(images, version="svd_xt", num_continuous_samples=[generations]*num_images)
+    samples = sample(images, version="svd_xt", num_continuous_samples=generations)
+    return samples
