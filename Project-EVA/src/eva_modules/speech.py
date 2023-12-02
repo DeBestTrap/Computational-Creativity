@@ -1,5 +1,7 @@
 import torch
 import sys
+
+# TODO not sure if there is a better way to do this?
 sys.path.insert(0, './vits')
 import commons as commons
 import utils as utils

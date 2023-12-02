@@ -27,16 +27,21 @@ pip install diffusers accelerate scipy safetensors git+https://github.com/huggin
 Get vits models from: https://drive.google.com/drive/folders/1ksarh-cJf3F5eKJjLVWY0X1j1qsQqiS2
 and put into ./src/vits/models/
 
-Make checkpoint and models dir
+Make models dir
 
-Assumes the dir structure looks like this:
+Assumes the dir structure looks like this after all your additions:
 ```
 root/
 ├── src/
 │   ├── .venv/
-│   ├── checkpoints/
-│   ├── eva_modules/
 │   ├── generative-models/
+│   ├── models/
+│   |   ├── svd/
+|   │   |   ├── model1.safetensors
+│   │   |   └── [other modes]
+|   │   |   ├── ...
+|   |   └── vits/
+|   │       ├── model1.safetensors
+│   │       └── [other models]
 │   └── vits/
-│       └── models/
 ```

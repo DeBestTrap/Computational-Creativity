@@ -1,3 +1,7 @@
 video_generator:
   fps: 6
   audio_sampling_rate: 22050
+models:
+  vits: "pretrained_vctk"
+  sd: "stabilityai/stable-diffusion-2-1-base"
+  svd: "svd_xt"

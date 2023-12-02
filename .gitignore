@@ -29,7 +29,7 @@ wandb
 
 # EVA
 generative-models/
-vits/
+Project-EVA/src/vits/
 audio*.wav
 output.mp4
 checkpoints/

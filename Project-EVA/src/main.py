@@ -5,7 +5,7 @@ from eva_modules.video import *
 import time
 
 import torch
-from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, concatenate_audioclips, CompositeVideoClip
+from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, afx, concatenate_audioclips, CompositeVideoClip
 import soundfile as sf
 import numpy as np
 import yaml
@@ -15,7 +15,7 @@ def pipeline(
     tts_captions:List[str],
     speakers:List[str] = None,
     seed:int=69,
-    device:str = "cuda" if torch.cuda.is_available() else "cpu",
+    device:str = "cuda",
     music_path = None
 ):
     '''
@@ -30,17 +30,19 @@ def pipeline(
     if not len(img_prompts) == len(tts_captions) == len(speakers):
         raise ValueError("Number of image prompts, number of text prompts, and number of speakers must match.")
 
-    with open("config.yaml") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-
-    # get TTS
-    # TODO change this for speaker selection
-    net_g, hps = get_tts_model("./vits/configs/vctk_base.json", "./vits/models/pretrained_vctk.pth") 
 
     # define vars
-    # TODO get this from type of SVD model
+    with open("config.yaml") as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
     sampling_rate = config['video_generator']['audio_sampling_rate']
+    # TODO get this from type of SVD model
     fps = config['video_generator']['fps']
+    vits_model = config['models']['vits']
+    sd_model = config['models']['sd']
+    svd_model = config['models']['svd']
+
+    # get TTS model
+    net_g, hps = get_tts_model(f"./configs/vits/{vits_model}.json", f"./models/vits/{vits_model}.pth") 
 
     def get_seconds_in_wav(wav, sampling_rate = 22050):
         if isinstance(wav, torch.Tensor):
@@ -61,8 +63,10 @@ def pipeline(
         generations.append(num_generations)
     del net_g, hps
 
+    # TODO add sovitssvc for speaker selection
+
     # get clips
-    videos = txt2vid(img_prompts, generations, device=device)
+    videos = txt2vid(img_prompts, generations, sd_model, svd_model, seed=seed, device=device)
     clips = []
     for i, video in enumerate(videos):
         # transform the video to match the sequence of images required for an image sequence clip
@@ -83,12 +87,38 @@ def pipeline(
 
     # add music if there is
     if music_path is not None:
-        music_clip = AudioFileClip(music_path)
-        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music_clip.volumex(0.1)])
+        music = AudioFileClip(music_path)
+        if music.duration > final_clip.duration:
+            print("Music is longer than the video, so we will trim it to match the video's length")
+            music = music.subclip(0, final_clip.duration)
+        elif music.duration < final_clip.duration:
+            print("Music is shorter than the video, so we will loop it to match the video's length")
+            music = afx.audio_loop(music, duration=final_clip.duration)
+        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.1)])
         final_clip = final_clip.set_audio(audio)
 
     final_clip.write_videofile("output.mp4", codec="libx264")
     return final_clip
+
+
+def get_models(print_models=False):
+    '''
+    returns a dict of models
+    '''
+    models_path = Path("./models/")
+    all_models = {}
+    for model in models_path.iterdir():
+        if model.is_dir():
+            all_models[model.stem] = [checkpoint.stem for checkpoint in model.iterdir()]
+
+    if print_models:
+        print("Available models:")
+        for model in all_models:
+            print(f"{model}:")
+            for checkpoint in all_models[model]:
+                print(f"  - {checkpoint}")
+    return all_models
+
 
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -106,13 +136,20 @@ if __name__ == "__main__":
                         type=str,
                         help="PATH to the music, if we want to add to the final track",
                         required=False)
-
+    parser.add_argument('--listmodels',
+                        action='store_true',
+                        help="List the available models and exit",
+                        default=False)
     args = parser.parse_args()
+
+    if args.listmodels:
+        get_models(print_models=True)
+        exit()
 
     captions, dialogues, characters = read_prompt(args.prompt)
 
     s = time.perf_counter()
-    pipeline(captions, dialogues, seed=args.seed, device=device)
+    pipeline(captions, dialogues, music_path=args.music, seed=args.seed, device=device)
     e = time.perf_counter()
     print(f"Time elapsed: {e-s} seconds")
 

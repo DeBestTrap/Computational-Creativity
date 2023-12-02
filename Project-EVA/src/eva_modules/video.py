@@ -69,31 +69,32 @@ def img2vid(
         num_frames = default(num_frames, 14)
         num_steps = default(num_steps, 25)
         output_folder = default(output_folder, "outputs/simple_video_sample/svd/")
-        model_config = "scripts/sampling/configs/svd.yaml"
+        model_config = "configs/svd/svd.yaml"
     elif version == "svd_xt":
         num_frames = default(num_frames, 25)
         num_steps = default(num_steps, 30)
         output_folder = default(output_folder, "outputs/simple_video_sample/svd_xt/")
-        model_config = "scripts/sampling/configs/svd_xt.yaml"
+        model_config = "configs/svd/svd_xt.yaml"
     elif version == "svd_image_decoder":
         num_frames = default(num_frames, 14)
         num_steps = default(num_steps, 25)
         output_folder = default(
             output_folder, "outputs/simple_video_sample/svd_image_decoder/"
         )
-        model_config = "scripts/sampling/configs/svd_image_decoder.yaml"
+        model_config = "configs/svd/svd_image_decoder.yaml"
     elif version == "svd_xt_image_decoder":
         num_frames = default(num_frames, 25)
         num_steps = default(num_steps, 30)
         output_folder = default(
             output_folder, "outputs/simple_video_sample/svd_xt_image_decoder/"
         )
-        model_config = "scripts/sampling/configs/svd_xt_image_decoder.yaml"
+        model_config = "configs/svd/svd_xt_image_decoder.yaml"
     else:
         raise ValueError(f"Version {version} does not exist.")
 
     model, filter = load_model(
-        "generative-models/"+model_config,
+        # "generative-models/"+model_config,
+        model_config,
         device,
         num_frames,
         num_steps,
