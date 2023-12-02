@@ -1,33 +1,8 @@
 import torch
-from typing import List
-
-def txt2speech(text:List[str], device:str):
-    '''
-    returns ??
-    '''
-
-
-def speech2speech(model):
-    '''
-    makes waveform sound like the model's voice
-    returns ??
-    '''
-    pass
-
-
-import torch
-from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, concatenate_audioclips, CompositeVideoClip
-import soundfile as sf
-import numpy as np
-import yaml
-
-from torch.utils.data import DataLoader
 import sys
-
 sys.path.insert(0, './vits')
 import commons as commons
 import utils as utils
-from data_utils import TextAudioLoader, TextAudioCollate, TextAudioSpeakerLoader, TextAudioSpeakerCollate
 from models import SynthesizerTrn
 from text.symbols import symbols
 from text import text_to_sequence
@@ -39,15 +14,17 @@ from text import text_to_sequence
 # from vits.text.symbols import symbols
 # from vits.text import text_to_sequence
 
+def text2speech(text, hps, net_g):
+    '''
+    From vits/inference.ipynb
+    '''
+    def get_text(text, hps):
+        text_norm = text_to_sequence(text, hps.data.text_cleaners)
+        if hps.data.add_blank:
+            text_norm = commons.intersperse(text_norm, 0)
+        text_norm = torch.LongTensor(text_norm)
+        return text_norm
 
-def get_text(text, hps):
-    text_norm = text_to_sequence(text, hps.data.text_cleaners)
-    if hps.data.add_blank:
-        text_norm = commons.intersperse(text_norm, 0)
-    text_norm = torch.LongTensor(text_norm)
-    return text_norm
-
-def tts(text, hps, net_g):
     stn_tst = get_text(text, hps)
     with torch.no_grad():
         x_tst = stn_tst.cuda().unsqueeze(0)
@@ -56,7 +33,11 @@ def tts(text, hps, net_g):
         audio = net_g.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
     return audio
 
-def get_tts(config_path:str, model_path:str):
+
+def get_tts_model(config_path:str, model_path:str):
+    '''
+    From vits/inference.ipynb
+    '''
     hps = utils.get_hparams_from_file(config_path)
     net_g = SynthesizerTrn(
         len(symbols),
@@ -68,95 +49,22 @@ def get_tts(config_path:str, model_path:str):
     _ = utils.load_checkpoint(model_path, net_g, None)
     return net_g, hps
 
-def testing():
-
-    with open("config.yaml") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-
-    # Get device
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
-    # get TTS
-    net_g, hps = get_tts("./vits/configs/vctk_base.json", "./vits/models/pretrained_vctk.pth") 
-
-    # define vars
-    sampling_rate = config['video_generator']['audio_sampling_rate']
-    fps = config['video_generator']['fps']
-    seconds_per_video = 25 / fps
-
-    def get_seconds_in_wav(wav, sampling_rate = 22050):
-        # convert to numpy
-        if isinstance(wav, torch.Tensor):
-            wav = wav.numpy()
-
-        return len(wav) / sampling_rate
-
-    a = 1
-    def generate_video(text, i=0, generations=1):
-        # video = torch.rand(25, 3, 512, 512)
-        video = torch.ones((25*generations, 3, 512, 512)) * i/(5*a)
-        return video
-
-    # texts = [
-    #     "Through the rise of image processing through machine learning, adversarial attacks prove to be a threat to the robustness of models.",
-    #     "This paper examines a novel purification technique that leverages the robustness of diffusion and model attention.",
-    #     "We apply inpainting to the attention map of a high layer representation of the model in order to effectively target an area to diffuse.",
-    #     "This provides a more effective way to purify an attacked image by generalizing the dimensions of which the model classifies.",
-    #     "Through experimentation we provide applicable methods that effectively eliminate adversarial attacks."
-    # ]
-    texts = [
-        "Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng. Hi my name is Zhi Zheng.",
-        "Through the rise of image processing through machine learning, adversarial attacks prove to be a threat to the robustness of models.",
-        "This paper examines a novel purification technique that leverages the robustness of diffusion and model attention.",
-        "Hi my name is Zhi Zheng.",
-        "We apply inpainting to the attention map of a high layer representation of the model in order to effectively target an area to diffuse.",
-        "This provides a more effective way to purify an attacked image by generalizing the dimensions of which the model classifies.",
-        "Through experimentation we provide applicable methods that effectively eliminate adversarial attacks."
-    ] * a
-
-    # go through every iteration of text
-    clips = []
-    for i, text in enumerate(texts):
-        # generate audio from text
-        wav = tts(text, hps, net_g)
-        sf.write(f'audio{i}.wav', wav, sampling_rate) 
-
-        # generate sufficently long video from audio
-        total_audio_seconds = get_seconds_in_wav(wav, hps.data.sampling_rate)
-        generations = np.ceil(total_audio_seconds * fps / 25).astype(int)
-        video = generate_video(text, i, generations)
-
-        # get clip
-        # transform the video to match the sequence of images required for an image sequence clip
-        transform_video = [(np_img * 255).astype('uint8') for np_img in video.permute(0, 2, 3, 1).numpy()]
-        clip = ImageSequenceClip(transform_video, fps=fps) 
-
-        # add audio to clip and fix the duration
-        audio = AudioFileClip(f'audio{i}.wav')
-        audio = audio.subclip(0, audio.duration-0.05)
-        silence_duration = max(0, clip.duration)
-        audio_silence = AudioClip(lambda x: 0, duration=silence_duration, fps=sampling_rate)
-        audio = CompositeAudioClip([audio, audio_silence])
-
-        clip = clip.set_audio(audio)
-        clips.append(clip)
-
-    final_clip = concatenate_videoclips(clips)
-    final_clip.write_videofile("output.mp4", codec="libx264")
-
-
 from so_vits_svc_fork.inference.main import infer
 from pathlib import Path
 import json
 
-def svc(config_key:str="Default VC (GPU, GTX 1060)"):
+def speech2speech(model, config_key:str="Default VC (GPU, GTX 1060)"):
     '''
+    makes waveform sound like the model's voice
+
     config_key options:
         Default VC (GPU, GTX 1060)
         Default VC (CPU)
         Default VC (Mobile CPU)
         Default VC (Crooning)
         Default File
+
+    returns ??
     '''
     input_path = Path("input")
     output_path = Path("output")

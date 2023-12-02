@@ -1,6 +1,5 @@
 import argparse
 import json
-import sys 
 
 def validate_json(data):
     """ Validate the data that enters through the json file (checking that keys exist) """
@@ -69,6 +68,8 @@ def read_prompt(prompt):
 
     except SystemExit:
         print('the .json file failed to validate correctly. Check to see if the generated content is correct with the validation step.')
+    
+    return parse_json(prompts)
 
 
 if __name__ == "__main__":
