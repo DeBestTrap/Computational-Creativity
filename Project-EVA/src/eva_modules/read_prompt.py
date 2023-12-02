@@ -43,9 +43,9 @@ def parse_json(data):
     for scene in data['script']:
         # send the caption
         caption = scene['caption']
-        captions.append(caption)
 
         for dialogue in scene['dialogue']:
+            captions.append(caption)
             # fetch VA
             character = dialogue['character']
             characters.append(character)
