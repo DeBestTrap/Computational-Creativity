@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 LLAMA_PATH = os.environ['LLAMA_PATH']
-LLAMA_DATA = os.environ['LLAMA_DATA']
+LLAMA_DATA = os.environ['LLM_DATA']
 
 def main(
     ckpt_dir: str,
