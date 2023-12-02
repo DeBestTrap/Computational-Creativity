@@ -114,64 +114,34 @@ def testing():
     ] * a
 
     # go through every iteration of text
-    audios = []
     clips = []
     for i, text in enumerate(texts):
-        # generate initial video
-        # video = generate_video(text, i)
+        # generate audio from text
         wav = tts(text, hps, net_g)
-    
-        total_audio_seconds = get_seconds_in_wav(wav, hps.data.sampling_rate)
-
-        # seconds_overall = seconds_per_video
-        # while seconds_overall < total_audio_seconds:
-        #     # generate the video
-        #     random_video = generate_video(text, i)
-
-        #     video = torch.cat((video, random_video), dim=0)
-
-        #     seconds_overall += seconds_per_video
-
-        generations = np.ceil(total_audio_seconds * fps / 25).astype(int)
-
-        video = generate_video(text, i, generations)
-
-        # get audio
-        # wav_numpy = np.array(wav)
         sf.write(f'audio{i}.wav', wav, sampling_rate) 
+
+        # generate sufficently long video from audio
+        total_audio_seconds = get_seconds_in_wav(wav, hps.data.sampling_rate)
+        generations = np.ceil(total_audio_seconds * fps / 25).astype(int)
+        video = generate_video(text, i, generations)
 
         # get clip
         # transform the video to match the sequence of images required for an image sequence clip
-        tranform_video = [(np_img * 255).astype('uint8') for np_img in video.permute(0, 2, 3, 1).numpy()]
-        clip = ImageSequenceClip(tranform_video, fps=fps) 
+        transform_video = [(np_img * 255).astype('uint8') for np_img in video.permute(0, 2, 3, 1).numpy()]
+        clip = ImageSequenceClip(transform_video, fps=fps) 
 
-        # add audio to clip
-        # audio = AudioFileClip('audio.wav')
-        # composite_audio = CompositeAudioClip([audio.set_duration(audio.duration)])
-        # clip = clip.set_audio(composite_audio)
+        # add audio to clip and fix the duration
         audio = AudioFileClip(f'audio{i}.wav')
-
         audio = audio.subclip(0, audio.duration-0.05)
-        # silence_duration = max(0, clip.duration - audio.duration)
         silence_duration = max(0, clip.duration)
         audio_silence = AudioClip(lambda x: 0, duration=silence_duration, fps=sampling_rate)
         audio = CompositeAudioClip([audio, audio_silence])
 
-        # audio = concatenate_audioclips([audio, audio_silence])
-        # audios.append(audio)
-        # audio = audio.set_duration(clip.duration)
         clip = clip.set_audio(audio)
-
-        # add to all clips
         clips.append(clip)
-        # if len(clips) > 2:
-        #     break
 
-    # final_audio = concatenate_audioclips(audios)
-    # final_clip = concatenate_videoclips(clips).set_audio(final_audio)
     final_clip = concatenate_videoclips(clips)
     final_clip.write_videofile("output.mp4", codec="libx264")
-    # final_clip.write_videofile("output.mp4", codec="h264_nvenc")
 
 
 from so_vits_svc_fork.inference.main import infer
