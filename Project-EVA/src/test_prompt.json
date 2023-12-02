@@ -3,12 +3,12 @@
         {"name": "Radke"}
     ],
     "script": [ 
-        {"caption": "A sheep with a gold chain around its neck and a baseball cap on its head standing in a grocery store.", 
+        {"caption": "A sheep looking at the condiment section of a supermarket.", 
          "dialogue": [
             {"character": "Radke", "text": "In the mist-enshrouded hills of an ancient land, there lies a mystery as old as time itself. Behold the enigmatic sheep, creatures shrouded in the lore and legend of yesteryears."}
         ]
         },
-        {"caption": "A sheep with a wizard hat casting magic spells and rituals", 
+        {"caption": "A sheep wearing a wizard hat casting magic spells in a large field with a ritual circle beneath them", 
          "dialogue": [
             {"character": "Radke", "text": "For centuries, scholars and mystics have pondered over their serene demeanors and unassuming presence."},
             {"character": "Radke", "text": "What arcane knowledge do they guard beneath their fluffy exteriors?"}
