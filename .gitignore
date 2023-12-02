@@ -32,6 +32,8 @@ generative-models/
 vits/
 audio.wav
 output.mp4
+checkpoints/
+outputs/
 
 # Other
 zeroscope_v2_576w/
