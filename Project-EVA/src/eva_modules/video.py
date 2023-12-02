@@ -21,27 +21,6 @@ def txt2img(prompts:List[str], device:str):
     # del pipe, scheduler
     return images
 
-# def sample(
-#     input_path: str = "assets/test_image.png",  # Can either be image file or folder with image files
-#     num_frames: Optional[int] = None,
-#     num_steps: Optional[int] = None,
-#     version: str = "svd",
-#     fps_id: int = 6,
-#     motion_bucket_id: int = 127,
-#     cond_aug: float = 0.02,
-#     seed: int = 23,
-#     decoding_t: int = 14,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
-#     device: str = "cuda",
-#     output_folder: Optional[str] = None,
-#     num_continuous_samples: int = 1,
-# ):
-#     '''
-#     TODO change params and implement it here
-
-#     SVD from stability ai
-#     return: numpy/tensors of frames (num_frames, height, width, 3)
-#     '''
-#     pass
 
 import math
 import os
@@ -57,6 +36,7 @@ from fire import Fire
 from omegaconf import OmegaConf
 import PIL.Image
 from torchvision.transforms import ToTensor
+from tqdm import tqdm
 
 # from scripts.util.detection.nsfw_and_watermark_dectection import \
 #     DeepFloydDataFiltering
@@ -64,7 +44,7 @@ from sgm.inference.helpers import embed_watermark
 from sgm.util import default, instantiate_from_config
 
 
-def sample(
+def img2vid(
     # input_path: str = "assets/test_image.png",  # Can either be image file or folder with image files
     input_imgs: List[PIL.Image.Image],
     num_frames: Optional[int] = None,
@@ -77,17 +57,20 @@ def sample(
     decoding_t: int = 1,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
     device: str = "cuda",
     output_folder: Optional[str] = None,
-    # num_continuous_samples: List[int] = None,
-    num_continuous_samples: int = 1,
+    num_continuous_samples: List[int] = None,
+    # num_continuous_samples: int = 1,
 ):
     """
     Simple script to generate a single sample conditioned on an image `input_path` or multiple images, one for each
     image file in folder `input_path`. If you run out of VRAM, try decreasing `decoding_t`.
+
+    SVD from stability ai
+    return: list of tensors of frames of size (num_frames, height, width, 3)
     """
-    print(f"decoding_t: {decoding_t}")
+
     torch.cuda.set_device(1)
-    # if num_continuous_samples is None:
-    #     num_continuous_samples = [1] * len(input_imgs)
+    if num_continuous_samples is None:
+        num_continuous_samples = [1] * len(input_imgs)
 
     if version == "svd":
         num_frames = default(num_frames, 14)
@@ -122,10 +105,10 @@ def sample(
         num_frames,
         num_steps,
     )
+
     torch.manual_seed(seed)
     videos = []
-
-    for i, image in enumerate(input_imgs):
+    for i, image in tqdm(enumerate(input_imgs)):
         w, h = image.size
 
         if h % 64 != 0 or w % 64 != 0:
@@ -165,10 +148,10 @@ def sample(
         value_dict["cond_aug"] = cond_aug
         value_dict["cond_frames_without_noise"] = image
         value_dict["cond_frames"] = image + cond_aug * torch.randn_like(image)
-        samples = torch.empty((0,) + image.shape[1:], device=device)
 
-        for _ in range(num_continuous_samples):
-        # for _ in range(num_continuous_samples[i]):
+        samples = torch.empty((0,) + image.shape[1:], device=device)
+        # for _ in range(num_continuous_samples):
+        for _ in range(num_continuous_samples[i]):
             with torch.no_grad():
                 with torch.autocast(device):
                     batch, batch_uc = get_batch(
@@ -215,6 +198,9 @@ def sample(
                     value_dict["cond_frames_without_noise"] = image
                     value_dict["cond_frames"] = image + cond_aug * torch.randn_like(image)
 
+        samples = embed_watermark(samples)
+        videos.append(samples)
+
         # os.makedirs(output_folder, exist_ok=True)
         # base_count = len(glob(os.path.join(output_folder, "*.mp4")))
         # video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
@@ -225,8 +211,6 @@ def sample(
         #     (samples.shape[-1], samples.shape[-2]),
         # )
 
-        samples = embed_watermark(samples)
-        videos.append(samples)
         # samples = filter(samples)
         # vid = (
         #     (rearrange(samples, "t c h w -> t h w c") * 255)
@@ -238,10 +222,8 @@ def sample(
         #     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         #     writer.write(frame)
         # writer.release()
-        return samples
 
     return videos
-
 
 def get_unique_embedder_keys_from_conditioner(conditioner):
     return list(set([x.input_key for x in conditioner.embedders]))
@@ -295,7 +277,6 @@ def load_model(
     num_steps: int,
 ):
     config = OmegaConf.load(config)
-    # if device == "cuda":
     if "cuda" in device:
         config.model.params.conditioner_config.params.emb_models[
             0
@@ -305,7 +286,6 @@ def load_model(
     config.model.params.sampler_config.params.guider_config.params.num_frames = (
         num_frames
     )
-    # if device == "cuda":
     if "cuda" in device:
         with torch.device(device):
             model = instantiate_from_config(config.model).to(device).eval()
@@ -316,18 +296,17 @@ def load_model(
     filter = lambda x: x
     return model, filter
 
-def txt2vid(prompts, num_images=1, generations=None, device="cuda"):
+def txt2vid(prompts: List[str],
+            generations: List[int] = None,
+            device = "cuda"
+):
     '''
-    SD
+    SD -> SVD
     returns video
     '''
-    # if generations is None:
-    #     generations = [1]*num_images
+    if generations is None:
+        generations = [1]*len(prompts)
 
-    prompts = ["A sheep with a gold chain around its neck is standing in a field."]*num_images
     images = txt2img(prompts, device=device)
-    # for i in range(len(images)):
-    #     images[i] = images[i].resize((1024, 576))
-    # samples = sample(images, version="svd_xt", num_continuous_samples=[generations]*num_images)
-    samples = sample(images, version="svd_xt", num_continuous_samples=generations)
+    samples = img2vid(images, version="svd_xt", num_continuous_samples=generations, device=device)
     return samples

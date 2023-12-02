@@ -56,7 +56,7 @@ def tts(text, hps, net_g):
         audio = net_g.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
     return audio
 
-def get_tts_hps(config_path:str, model_path:str):
+def get_tts(config_path:str, model_path:str):
     hps = utils.get_hparams_from_file(config_path)
     net_g = SynthesizerTrn(
         len(symbols),
@@ -77,7 +77,7 @@ def testing():
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # get TTS
-    net_g, hps = get_tts_hps("./vits/configs/vctk_base.json", "./vits/models/pretrained_vctk.pth") 
+    net_g, hps = get_tts("./vits/configs/vctk_base.json", "./vits/models/pretrained_vctk.pth") 
 
     # define vars
     sampling_rate = config['video_generator']['audio_sampling_rate']

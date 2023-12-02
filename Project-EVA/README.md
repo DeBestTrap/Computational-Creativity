@@ -1,6 +1,8 @@
 # Installation
 ```bash
 sudo apt install espeak
+# Not sure what the installation is for Windows
+
 # pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
 
 # SVD (img2vid)
@@ -24,3 +26,17 @@ pip install diffusers accelerate scipy safetensors git+https://github.com/huggin
 
 Get vits models from: https://drive.google.com/drive/folders/1ksarh-cJf3F5eKJjLVWY0X1j1qsQqiS2
 and put into ./src/vits/models/
+
+Make checkpoint and models dir
+
+Assumes the dir structure looks like this:
+```
+root/
+├── src/
+│   ├── .venv/
+│   ├── checkpoints/
+│   ├── eva_modules/
+│   ├── generative-models/
+│   └── vits/
+│       └── models/
+```
