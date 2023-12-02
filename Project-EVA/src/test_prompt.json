@@ -3,19 +3,20 @@
         {"name": "Radke"}
     ],
     "script": [ 
-        {"caption": "A sheep with a gold chain around its neck is standing in a field.", 
+        {"caption": "A sheep with a gold chain around its neck and a baseball cap on its head standing in a grocery store.", 
          "dialogue": [
-            {"character": "Radke", "text": "In a whimsical world, a sheep wanders into a bank, curiously clutching a wallet overflowing with cash."}
+            {"character": "Radke", "text": "In the mist-enshrouded hills of an ancient land, there lies a mystery as old as time itself. Behold the enigmatic sheep, creatures shrouded in the lore and legend of yesteryears."}
         ]
         },
-        {"caption": "A person teaching class looking at a blackboard", 
+        {"caption": "A sheep with a wizard hat casting magic spells and rituals", 
          "dialogue": [
-            {"character": "Radke", "text": "This is why I dedicate myself to the study of sheep all around the world."}
+            {"character": "Radke", "text": "For centuries, scholars and mystics have pondered over their serene demeanors and unassuming presence."},
+            {"character": "Radke", "text": "What arcane knowledge do they guard beneath their fluffy exteriors?"}
         ]
         },
-        {"caption": "A man looking at sheep eating grass", 
+        {"caption": "A man looking at sheep eating grass around a field.", 
          "dialogue": [
-            {"character": "Radke", "text": "Otherwise, we cannot figure out mankinds greatest mysteries, a sheep with too much cash."}
+            {"character": "Radke", "text": "Join us, as we unravel the ancient mystery of the sheep."}
         ]
         }
     ]
