@@ -1,0 +1,12 @@
+{
+    "characters": [
+        {"name": "Radke"}
+    ],
+    "script": [ 
+        {"caption": "Man putting bread into the oven", 
+         "dialogue": [
+            {"character": "Radke", "text": "When I wake up in the morning I take a huge sip of coffee, then I look in my oven. Because my bakery is always open, day and night."}
+        ]
+        }
+    ]
+}

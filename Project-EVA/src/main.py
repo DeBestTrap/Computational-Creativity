@@ -15,7 +15,8 @@ def pipeline(
     tts_captions:List[str],
     speakers:List[str] = None,
     seed:int=69,
-    device:str = "cuda" if torch.cuda.is_available() else "cpu"
+    device:str = "cuda" if torch.cuda.is_available() else "cpu",
+    music_path = None
 ):
     '''
     TODO implement svc for speakers
@@ -79,6 +80,13 @@ def pipeline(
         clips.append(clip)
 
     final_clip = concatenate_videoclips(clips)
+
+    # add music if there is
+    if music_path is not None:
+        music_clip = AudioFileClip(music_path)
+        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music_clip.volumex(0.1)])
+        final_clip = final_clip.set_audio(audio)
+
     final_clip.write_videofile("output.mp4", codec="libx264")
     return final_clip
 
@@ -94,6 +102,10 @@ if __name__ == "__main__":
                         type=int,
                         help="Seed for the random number generators",
                         default=69)
+    parser.add_argument('--music',
+                        type=str,
+                        help="PATH to the music, if we want to add to the final track",
+                        required=False)
 
     args = parser.parse_args()
 
