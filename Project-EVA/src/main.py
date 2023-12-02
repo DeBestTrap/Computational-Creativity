@@ -88,6 +88,17 @@ def pipeline(
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--prompt', 
+                        type=str, 
+                        help="PATH to the prompt, which is the path to a .json file",
+                        required=True)
+
+    args = parser.parse_args()
+
+    read_prompt(args.prompt)
+
+
     # svc()
 
     # prompts = ["A sheep with a gold chain around its neck is standing in a field."]
@@ -111,14 +122,7 @@ if __name__ == "__main__":
     # ] * a
     # testing()
 
-    num_images = 3
-    prompts = ["A sheep with a gold chain around its neck is standing in a field."]*num_images
-    texts = [
-        "Through the rise of image processing through machine learning, adversarial attacks prove to be a threat to the robustness of models.",
-        "This paper examines a novel purification technique that leverages the robustness of diffusion and model attention.",
-        "We apply inpainting to the attention map of a high layer representation of the model in order to effectively target an area to diffuse.",
-        "This provides a more effective way to purify an attacked image by generalizing the dimensions of which the model classifies.",
-        "Through experimentation we provide applicable methods that effectively eliminate adversarial attacks."
-    ][:num_images]
+    captions, dialogues, characters = parse_json(args.prompt)
+
     # samples = txt2vid("", num_images=2, device=device)
-    pipeline(prompts, texts, device=device)
+    pipeline(captions, dialogues, device=device)

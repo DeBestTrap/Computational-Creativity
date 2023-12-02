@@ -1,0 +1,22 @@
+{
+    "characters": [
+        {"name": "Radke"}
+    ],
+    "script": [ 
+        {"caption": "A sheep with a gold chain around its neck is standing in a field.", 
+         "dialogue": [
+            {"character": "Radke", "text": "In a whimsical world, a sheep wanders into a bank, curiously clutching a wallet overflowing with cash."}
+        ]
+        },
+        {"caption": "A person teaching class looking at a blackboard", 
+         "dialogue": [
+            {"character": "Radke", "text": "This is why I dedicate myself to the study of sheep all around the world."}
+        ]
+        },
+        {"caption": "A man looking at sheep eating grass", 
+         "dialogue": [
+            {"character": "Radke", "text": "Otherwise, we cannot figure out mankinds greatest mysteries, a sheep with too much cash."}
+        ]
+        }
+    ]
+}
