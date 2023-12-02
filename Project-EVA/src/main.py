@@ -10,9 +10,6 @@ import soundfile as sf
 import numpy as np
 import yaml
 
-from torch.utils.data import DataLoader
-import sys
-
 def pipeline(
     img_prompts:List[str],
     tts_captions:List[str],

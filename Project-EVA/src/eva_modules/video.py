@@ -3,9 +3,6 @@ import torch
 from typing import Optional, List
 
 import math
-from typing import Optional
-
-import torch
 from einops import rearrange, repeat
 from omegaconf import OmegaConf
 import PIL.Image
@@ -37,8 +34,8 @@ def txt2img(prompts:List[str],
         generator = torch.Generator(device="cuda").manual_seed(seed+i) 
         image = pipe(prompt, generator=generator).images[0]  
         images.append(image)
-    # del pipe, scheduler
 
+    # del pipe, scheduler
     return images
 
 
@@ -146,7 +143,6 @@ def img2vid(
         value_dict["cond_frames"] = image + cond_aug * torch.randn_like(image)
 
         samples = torch.empty((0,) + image.shape[1:], device=device)
-        # for _ in range(num_continuous_samples):
         for _ in range(num_continuous_samples[i]):
             with torch.no_grad():
                 with torch.autocast(device):
@@ -196,28 +192,6 @@ def img2vid(
 
         samples = embed_watermark(samples)
         videos.append(samples)
-
-        # os.makedirs(output_folder, exist_ok=True)
-        # base_count = len(glob(os.path.join(output_folder, "*.mp4")))
-        # video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
-        # writer = cv2.VideoWriter(
-        #     video_path,
-        #     cv2.VideoWriter_fourcc(*"MP4V"),
-        #     fps_id + 1,
-        #     (samples.shape[-1], samples.shape[-2]),
-        # )
-
-        # samples = filter(samples)
-        # vid = (
-        #     (rearrange(samples, "t c h w -> t h w c") * 255)
-        #     .cpu()
-        #     .numpy()
-        #     .astype(np.uint8)
-        # )
-        # for frame in vid:
-        #     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-        #     writer.write(frame)
-        # writer.release()
 
     return videos
 
@@ -302,7 +276,7 @@ def txt2vid(prompts: List[str],
             device = "cuda"
 ):
     '''
-    SD -> SVD
+    prompts -> [SD] -> images -> [SVD] -> videos
     returns video
     '''
     if generations is None:

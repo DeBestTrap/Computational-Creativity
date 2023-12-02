@@ -1,15 +1,8 @@
 import torch
-from typing import List
-from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, concatenate_audioclips, CompositeVideoClip
-import soundfile as sf
-import numpy as np
-import yaml
-from torch.utils.data import DataLoader
 import sys
 sys.path.insert(0, './vits')
 import commons as commons
 import utils as utils
-from data_utils import TextAudioLoader, TextAudioCollate, TextAudioSpeakerLoader, TextAudioSpeakerCollate
 from models import SynthesizerTrn
 from text.symbols import symbols
 from text import text_to_sequence

@@ -1,6 +1,5 @@
 import argparse
 import json
-import sys 
 
 def validate_json(data):
     """ Validate the data that enters through the json file (checking that keys exist) """
