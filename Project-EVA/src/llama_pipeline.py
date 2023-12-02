@@ -1,16 +1,20 @@
 from typing import List, Optional
-import fire
 from llama import Llama, Dialog
-
 import os
-import torch
+import json
+from dotenv import load_dotenv
+
+load_dotenv()
+
+LLAMA_PATH = os.environ['LLAMA_PATH']
+LLAMA_DATA = os.environ['LLAMA_DATA']
 
 def main(
     ckpt_dir: str,
     tokenizer_path: str,
     temperature: float = 0.6,
     top_p: float = 0.9,
-    max_seq_len: int = 512,
+    max_seq_len: int = 2048,
     max_batch_size: int = 8,
     max_gen_len: Optional[int] = None,
 ):
@@ -29,6 +33,10 @@ def main(
         max_gen_len (int, optional): The maximum length of generated sequences. If None, it will be
             set to the model's max sequence length. Defaults to None.
     """
+
+    with open(LLAMA_DATA, 'r') as file:
+        data = json.load(file)
+    
     generator = Llama.build(
         ckpt_dir=ckpt_dir,
         tokenizer_path=tokenizer_path,
@@ -36,31 +44,37 @@ def main(
         max_batch_size=max_batch_size,
     )
 
-    dialogs: List[Dialog] = [
-        [{"role": "user", "content": "what is the recipe of mayonnaise?"}],
-        [{"role": "user", "content": "I am going to Paris, what should I see?"},
-            {"role": "assistant", "content": "Paris, the capital of France, is known for its stunning architecture, art museums, historical landmarks, and romantic atmosphere."},
-            {"role": "user", "content": "What is so great about #1?"},
-        ],
-    ]
+    dialogs: List[Dialog] = data
+
     results = generator.chat_completion(
-        dialogs,  # type: ignore
+        dialogs, # type: ignore
         max_gen_len=max_gen_len,
         temperature=temperature,
         top_p=top_p,
     )
 
+    # a conversation is considered a prompt and a response
+    print(f'[@DATABEGIN]')
+
+    # all conversations
     for dialog, result in zip(dialogs, results):
+
+        print(f'[@CONVERSATIONBEGIN]')
+
+        # conversation prompt
         for msg in dialog:
             print(f"{msg['role'].capitalize()}: {msg['content']}\n")
-        print(
-            f"> {result['generation']['role'].capitalize()}: {result['generation']['content']}"
-        )
-        print("\n==================================\n")
+        
+        print(f'[@RESPONSEBEGIN]')
+        print(f"{result['generation']['content']}")
+        print(f'[@RESPONSEEND]')
 
+        print(f'[@CONVERSATIONEND]')
+
+    print(f'[@DATAEND]')
 
 if __name__ == "__main__":
     #fire.Fire(main)
-    ckpt = '/home/eggyrepublic/ERU/RPI/llama/llama-2-7b-chat'
-    tokenizer = '/home/eggyrepublic/ERU/RPI/llama/tokenizer.model'
+    ckpt = f'{LLAMA_PATH}/llama-2-7b-chat'
+    tokenizer = f'{LLAMA_PATH}/tokenizer.model'
     main(ckpt, tokenizer)
