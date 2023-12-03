@@ -5,12 +5,13 @@ import json
 
 load_dotenv()
 
-LLM_DATA = os.environ['LLM_DATA']
+LLM_DATA_FEED = os.environ['LLM_DATA_FEED']
+LLM_DATA_REPLY = os.environ['LLM_DATA_REPLY']
 
 def main():
   client = OpenAI()
 
-  with open(LLM_DATA, 'r') as file:
+  with open(LLM_DATA_FEED, 'r') as file:
       data = json.load(file)
 
   response = client.chat.completions.create(
@@ -20,5 +21,8 @@ def main():
 
   response_text = response.choices[0].message.content
   print(response_text)
+
+  with open(LLM_DATA_REPLY, 'w') as file:
+    file.write(response_text)
 
 main()
