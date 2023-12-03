@@ -132,6 +132,7 @@ def pipeline_tortoise(
     sd_model = config['models']['sd']
     svd_model = config['models']['svd']
     voice = config['tortoise_tts']['voice'] # voice of the dialogue TBI different voices
+    preset = config['tortoise_tts']['preset']
 
     # get TTS model
     tts = get_tts_model() 
@@ -146,7 +147,7 @@ def pipeline_tortoise(
     generations = []
     for i, text in enumerate(tts_captions):
         # generate audio from text
-        gen = text2speech_tortoise(text, tts, voice)
+        gen = text2speech_tortoise(text, tts, voice, preset)
         save_audio_as_file_tortoise(f'audio{i}.wav', gen, sampling_rate)
 
         # generate sufficently long video from audio
@@ -154,7 +155,7 @@ def pipeline_tortoise(
         num_generations = np.ceil(total_audio_seconds * fps / 25).astype(int)
         generations.append(num_generations)
         del gen
-        
+
     del tts
 
     # make all the audios the speaker
