@@ -17,6 +17,11 @@ cd ./src/vits/monotonic_align
 mkdir monotonic_align
 python setup.py build_ext --inplace
 
+# if using tortoise-tts (txt2speech)
+pip install git+https://github.com/neonbjb/tortoise-tts
+cd tortoise-tts
+python setup.py install
+
 # Audio/Video editing
 pip install pyyaml moviepy soundfile
 

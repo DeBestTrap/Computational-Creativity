@@ -1,6 +1,7 @@
 # %%
 from eva_modules.read_prompt import *
 from eva_modules.speech import *
+from eva_modules.tortoise_speech import *
 from eva_modules.video import *
 import time
 
@@ -103,6 +104,101 @@ def pipeline(
     final_clip.write_videofile("output.mp4", codec="libx264")
     return final_clip
 
+
+def pipeline_tortoise(
+    img_prompts:List[str],
+    tts_captions:List[str],
+    speakers:List[str] = None,
+    seed:int=69,
+    device:str = "cuda",
+    music_path = None
+):
+    '''
+    tts_captions -> [VITS] -> wavs
+    img_prompts -> [SD] -> imgs -> [SVD] -> videos
+    wavs + videos -> final video
+    '''
+    if speakers is None:
+        speakers = ["default"] * len(img_prompts)
+    if not len(img_prompts) == len(tts_captions) == len(speakers):
+        raise ValueError("Number of image prompts, number of text prompts, and number of speakers must match.")
+
+
+    # define vars
+    with open("config.yaml") as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+    sampling_rate = config['tortoise_tts']['audio_sampling_rate_tortoise']
+    fps = config['video_generator']['fps']
+    sd_model = config['models']['sd']
+    svd_model = config['models']['svd']
+    voice = config['tortoise_tts']['voice'] # voice of the dialogue TBI different voices
+
+    # get TTS model
+    tts = get_tts_model() 
+
+    def get_seconds_in_wav(wav, sampling_rate = 22050):
+        if isinstance(wav, torch.Tensor):
+            wav = wav.numpy()
+
+        return len(wav) / sampling_rate
+
+    # generate all the audios first to know how long each videos should be
+    generations = []
+    for i, text in enumerate(tts_captions):
+        # generate audio from text
+        gen = text2speech_tortoise(text, tts, voice)
+        save_audio_as_file_tortoise(f'audio{i}.wav', gen, sampling_rate)
+
+        # generate sufficently long video from audio
+        total_audio_seconds = get_seconds_in_wav(gen[0][0], sampling_rate)
+        num_generations = np.ceil(total_audio_seconds * fps / 25).astype(int)
+        generations.append(num_generations)
+        del gen
+        
+    del tts
+
+    # make all the audios the speaker
+    for i, speaker in enumerate(speakers):
+        if speaker != "default":
+            if speaker.lower() not in map(lambda x: x.lower(), get_models()["so-vits-svc"]):
+                print(f"Speaker {speaker} not found. Using default TTS. Use --listmodels to see available models.")
+                continue
+            speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
+
+    # get clips
+    videos = txt2vid(img_prompts, generations, sd_model, svd_model, seed=seed, device=device)
+    clips = []
+    for i, video in enumerate(videos):
+        # transform the video to match the sequence of images required for an image sequence clip
+        transform_video = [(np_img * 255).astype('uint8') for np_img in video.permute(0, 2, 3, 1).cpu().numpy()]
+        clip = ImageSequenceClip(transform_video, fps=fps) 
+
+        # add audio to clip and fix the duration and glitchiness
+        audio = AudioFileClip(f'audio{i}.wav')
+        audio = audio.subclip(0, audio.duration-0.05)
+        silence_duration = max(0, clip.duration)
+        audio_silence = AudioClip(lambda x: 0, duration=silence_duration, fps=sampling_rate)
+        audio = CompositeAudioClip([audio, audio_silence])
+
+        clip = clip.set_audio(audio)
+        clips.append(clip)
+
+    final_clip = concatenate_videoclips(clips)
+
+    # add music if there is
+    if music_path is not None:
+        music = AudioFileClip(music_path)
+        if music.duration > final_clip.duration:
+            print("Music is longer than the video, so we will trim it to match the video's length")
+            music = music.subclip(0, final_clip.duration)
+        elif music.duration < final_clip.duration:
+            print("Music is shorter than the video, so we will loop it to match the video's length")
+            music = afx.audio_loop(music, duration=final_clip.duration)
+        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.1)])
+        final_clip = final_clip.set_audio(audio)
+
+    final_clip.write_videofile("output.mp4", codec="libx264")
+    return final_clip
 
 def get_models(print_models=False):
     '''

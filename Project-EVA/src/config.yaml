@@ -1,6 +1,11 @@
 video_generator:
   fps: 6
   audio_sampling_rate: 22050
+
+tortoise_tts:
+  audio_sampling_rate_tortoise: 24000
+  voice: "tom"
+
 models:
   vits: "pretrained_vctk"
   sd: "stabilityai/stable-diffusion-2-1-base"
