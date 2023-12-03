@@ -71,14 +71,3 @@ def read_prompt(prompt):
     
     return parse_json(prompts)
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--prompt', 
-                        type=str, 
-                        help="PATH to the prompt, which is the path to a .json file",
-                        required=True)
-
-    args = parser.parse_args()
-
-    read_prompt(args.prompt)
