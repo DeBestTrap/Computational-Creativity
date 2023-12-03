@@ -1,6 +1,5 @@
 import argparse
 import json
-import sys 
 
 def validate_json(data):
     """ Validate the data that enters through the json file (checking that keys exist) """
@@ -33,19 +32,28 @@ def validate_json(data):
     return True
 
 def parse_json(data):
+    # captions stored in a list
+    captions = []
+    # dialogue stored in a list
+    dialogues = []
+    # character stored in a list
+    characters = []
+
     for scene in data['script']:
         # send the caption
         caption = scene['caption']
-        # TBI
 
         for dialogue in scene['dialogue']:
+            captions.append(caption)
             # fetch VA
             character = dialogue['character']
-            # TBI
+            characters.append(character)
 
             # get VA to read text
             text = dialogue['text']
-            # TBI
+            dialogues.append(text)
+    
+    return (captions, dialogues, characters)
 
 def read_prompt(prompt):
     """ Read the prompt and return the generated content """
@@ -60,6 +68,8 @@ def read_prompt(prompt):
 
     except SystemExit:
         print('the .json file failed to validate correctly. Check to see if the generated content is correct with the validation step.')
+    
+    return parse_json(prompts)
 
 
 if __name__ == "__main__":
