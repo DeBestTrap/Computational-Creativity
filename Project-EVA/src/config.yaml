@@ -5,7 +5,6 @@ video_generator:
 tortoise_tts:
   audio_sampling_rate_tortoise: 24000
   voice: "train_empire"
-  preset: "standard"
 
 models:
   vits: "pretrained_vctk"

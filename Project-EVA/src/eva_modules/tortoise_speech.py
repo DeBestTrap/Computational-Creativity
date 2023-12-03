@@ -6,12 +6,12 @@ import sys
 
 # TODO not sure if there is a better way to do this?
 sys.path.insert(0, './tortoise-tts')
-from tortoise.api import TextToSpeech
+from tortoise.api_fast import TextToSpeech
 from tortoise.utils.audio import load_audio, load_voice, load_voices
 
-def text2speech_tortoise(text, tts, voice, preset = "fast"):
-    voice_samples, conditioning_latents = load_voice(voice)
-    gen = tts.tts_with_preset(text, voice_samples=voice_samples, conditioning_latents=conditioning_latents, preset=preset)
+def text2speech_tortoise(text, tts, voice):
+    voice_samples = load_voice(voice)
+    gen = tts.tts(text, voice_samples=voice_samples)
     return gen
 
 def get_tts_model_tortoise(use_deepspeed=True, kv_cache=True, half=True):

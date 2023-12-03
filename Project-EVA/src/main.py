@@ -132,10 +132,10 @@ def pipeline_tortoise(
     sd_model = config['models']['sd']
     svd_model = config['models']['svd']
     voice = config['tortoise_tts']['voice'] # voice of the dialogue TBI different voices
-    preset = config['tortoise_tts']['preset']
 
     # get TTS model
-    tts = get_tts_model() 
+    # if there is an error it is generally due to deepspeed, turn it to False if that happens to disable it
+    tts = get_tts_model_tortoise(use_deepspeed=True, kv_cache=True, half=True) 
 
     def get_seconds_in_wav(wav, sampling_rate = 22050):
         if isinstance(wav, torch.Tensor):
@@ -147,7 +147,7 @@ def pipeline_tortoise(
     generations = []
     for i, text in enumerate(tts_captions):
         # generate audio from text
-        gen = text2speech_tortoise(text, tts, voice, preset)
+        gen = text2speech_tortoise(text, tts, voice)
         save_audio_as_file_tortoise(f'audio{i}.wav', gen, sampling_rate)
 
         # generate sufficently long video from audio
