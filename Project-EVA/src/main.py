@@ -10,6 +10,15 @@ import soundfile as sf
 import numpy as np
 import yaml
 
+import subprocess
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+LLM_PIPELINE = 'llm_pipeline.py'
+
 def pipeline(
     img_prompts:List[str],
     tts_captions:List[str],
@@ -124,6 +133,13 @@ def get_models(print_models=False):
     return all_models
 
 
+def get_prompt(input):
+    arguments = ["python3", f"{LLM_PIPELINE}", f"'{input}'"]
+    subprocess.run(arguments, capture_output=False, text=True)
+    llm_data_reply = os.environ['LLM_DATA_REPLY']
+    return llm_data_reply
+
+
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -150,7 +166,7 @@ if __name__ == "__main__":
         get_models(print_models=True)
         exit()
 
-    captions, dialogues, characters = read_prompt(args.prompt)
+    captions, dialogues, characters = read_prompt(get_prompt(args.prompt))
 
     s = time.perf_counter()
     pipeline(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
