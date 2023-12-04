@@ -245,10 +245,17 @@ if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('--selfprompt', 
+                        type=str, 
+                        help="PATH to the a prompt that is created by the user (must follow the similar file format), which is the path to a .json file. If not prompts are used, then the test_prompt.json will be defaulted.",
+                        default="test_prompt.json",
+                        required=False)
+    
     parser.add_argument('--prompt', 
                         type=str, 
-                        help="PATH to the prompt, which is the path to a .json file",
-                        required=True)
+                        help="a prompt to queue a LLM to generate a movie",
+                        required=False) 
+
     parser.add_argument('--seed',
                         type=int,
                         help="Seed for the random number generators",
@@ -263,11 +270,20 @@ if __name__ == "__main__":
                         default=False)
     args = parser.parse_args()
 
-    if args.listmodels:
-        get_models(print_models=True)
-        exit()
+    prompt = args.selfprompt
 
-    captions, dialogues, characters = read_prompt(get_prompt(args.prompt))
+    # use the LLM
+    if args.prompt is not None:
+        if args.listmodels:
+            get_models(print_models=True)
+            exit()
+        
+        prompt = get_prompt(args.prompt)
+
+    print(f'using the prompt at: {prompt}')
+
+    captions, dialogues, characters = read_prompt(prompt)
+    print(captions)
 
     s = time.perf_counter()
     pipeline_tortoise(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
