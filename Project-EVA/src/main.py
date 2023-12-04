@@ -123,7 +123,7 @@ def pipeline_tortoise(
     music_path = None
 ):
     '''
-    tts_captions -> [VITS] -> wavs
+    tts_captions -> [tortoise] -> torch wav
     img_prompts -> [SD] -> imgs -> [SVD] -> videos
     wavs + videos -> final video
     '''
@@ -140,8 +140,6 @@ def pipeline_tortoise(
     fps = config['video_generator']['fps']
     sd_model = config['models']['sd']
     svd_model = config['models']['svd']
-    voice = config['tortoise_tts']['voice'] # voice of the dialogue TBI different voices
-
     # get TTS model
     # if there is an error it is generally due to deepspeed, turn it to False if that happens to disable it
     tts = get_tts_model_tortoise(use_deepspeed=True, kv_cache=True, half=True) 
@@ -152,9 +150,15 @@ def pipeline_tortoise(
 
         return len(wav) / sampling_rate
 
+    # create a character listing
+    character_listing = create_voice_listing_characters(speakers, config['tortoise_tts'])
+
     # generate all the audios first to know how long each videos should be
     generations = []
-    for i, text in enumerate(tts_captions):
+    for i, (text, character) in enumerate(zip(tts_captions, characters)):
+        # get voice from character
+        voice = character_listing[character]
+
         # generate audio from text
         gen = text2speech_tortoise(text, tts, voice)
         save_audio_as_file_tortoise(f'audio{i}.wav', gen, sampling_rate)
@@ -266,7 +270,7 @@ if __name__ == "__main__":
     captions, dialogues, characters = read_prompt(get_prompt(args.prompt))
 
     s = time.perf_counter()
-    pipeline(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
+    pipeline_tortoise(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
     e = time.perf_counter()
     print(f"Time elapsed: {e-s} seconds")
 

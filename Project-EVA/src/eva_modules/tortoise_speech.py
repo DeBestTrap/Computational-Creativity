@@ -20,3 +20,13 @@ def get_tts_model_tortoise(use_deepspeed=True, kv_cache=True, half=True):
 
 def save_audio_as_file_tortoise(file_name, gen, sample_rate = 24000):
     torchaudio.save(file_name, gen.squeeze(0).cpu(), sample_rate)
+
+def create_voice_listing_characters(characters, config_tortoise):
+    chars = {}
+    k = 1
+    for character in characters:
+        if chars.get(character) is None:
+            chars[character] = config_tortoise[f"actor_voice_{k}"]
+            k += 1
+    
+    return chars

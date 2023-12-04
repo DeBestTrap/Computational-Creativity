@@ -4,7 +4,14 @@ video_generator:
 
 tortoise_tts:
   audio_sampling_rate_tortoise: 24000
-  voice: "train_empire"
+  default_voice: "train_empire"
+  actor_voice_1: "train_empire"
+  actor_voice_2: "train_atkins"
+  actor_voice_3: "train_dotrice"
+  actor_voice_4: "train_dreams"
+  actor_voice_5: "train_lescault"
+  actor_voice_6: "train_kennard"
+  actor_voice_7: "train_grace"
 
 models:
   vits: "pretrained_vctk"
