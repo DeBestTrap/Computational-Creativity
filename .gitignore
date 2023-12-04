@@ -6,6 +6,7 @@ venv/
 .venv/
 README.html
 __pycache__/
+.env
 
 # Latex Files
 *.out

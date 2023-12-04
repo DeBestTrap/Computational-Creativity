@@ -1,0 +1,52 @@
+{
+    "title": "The Time of Beasts",
+    "setting": "In a peaceful village nestled between lush green hills and far-reaching farmlands.",
+    "plot": [
+        {
+            "event": "The onslaught of animals overrunning the village and consuming its precious crops."
+        },
+        {
+            "event": "The villagers unite to decipher the cause of this sudden menace and aim to restore tranquility."
+        }
+    ],
+    "characters": [
+        {
+            "name": "Haraldr",
+            "description": "The wise village elder, known for his peaceful demeanour and profound knowledge about the harmony between nature and mankind."
+        },
+        {
+            "name": "Agnes",
+            "description": "The fearless village gardener, whose heart beats for the well-being of the village crops and the balance of the nature."
+        },
+        {
+            "name": "Sturla",
+            "description": "A free-spirited, curious child with a keen eye for observing animal behaviour."
+        }
+    ],
+    "script": [ 
+        {
+            "caption": "An swarm of various animals rampaging through the village farmlands.", 
+            "dialogue": [
+                {"character": "Haraldr", "text": "What dawns upon us is a time of chaos, a time of beasts."},
+                {"character": "Agnes", "text": "Our lives and livelihoods intertwine with these fields. We must stand resistant against this menace."},
+                {"character": "Sturla", "text": "I’ve noticed something unusual, a strange behavior among the animals, it's as if... they are being controlled."}
+            ]
+        },
+        {
+            "caption": "The villagers forming a strategic plan to restore peace and save their crops.", 
+            "dialogue": [
+                {"character": "Agnes", "text": "We need to understand the animals, not fight them. The crops can be regrown, but broken harmony with nature is harder to mend."},
+                {"character": "Haraldr", "text": "Agnes speaks wisdom. We must tread cautiously and seek help from the beast-tamers."},
+                {"character": "Sturla", "text": "I want to help too! I'll observe the animals and report any unusual behavior."}
+            ]
+        },
+        {
+            "caption": "The villagers working relentlessly to restore harmony and balance.", 
+            "dialogue": [
+                {"character": "Haraldr", "text": "In unity lies our strength. Unravel the mysteries of nature, fight not against it but with it."},
+                {"character": "Agnes", "text": "Let's begin replanting. We can install better protections, scarecrows, fences... and Sturla, keep observing the animals."},
+                {"character": "Sturla", "text": "I will not let you down! The time of beasts will be over soon."}
+            ]
+        }
+    ]
+}

@@ -1,0 +1,87 @@
+{
+    "characters": [
+        {"name": "FarmerJohn"},
+        {"name": "OldManSam"}
+    ],
+    "script": [ 
+        {
+            "caption": "Sunrise breaking over a quaint rural village with blooming crops.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "Nothing’s more fulfilling than harvesting what you sow, eh Sam?"}
+            ]
+        },
+        {
+            "caption": "A flock of sheep infiltrating a vegetable garden and nibbling away." ,
+            "dialogue": [
+                {"character": "OldManSam", "text": "Those damn sheep again! They’re chewing through our livelihood!"}
+            ]
+        },
+        {
+            "caption": "Chickens pecking away at a perfectly baked pie left to cool off.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "And the chickens have developed quite a sweet tooth. They're threatening our pies now."}
+            ]
+        },
+        {
+            "caption": "Pigs on a rampage, digging up tuberous crops.",
+            "dialogue": [
+                {"character": "OldManSam", "text": "The pigs aren't any better, digging up all our taters."}
+            ]
+        },
+        {
+            "caption": "A large herd of cattle trampling through the corn field.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "Look at them cattle! Just storming through our corn field."}
+            ]
+        },
+        {
+            "caption": "Squirrels gorging on berries from bushes, their cheeks stuffed.",
+            "dialogue": [
+                {"character": "OldManSam", "text": "Even the darn squirrels are joining in. Look at their plump cheeks!"}
+            ]
+        },
+        {
+            "caption": "Birds swooping down and snatching fruits from trees.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "Birds too! They are snatching our fruits before they can even ripen!"}
+            ]
+        },
+        {
+            "caption": "Raccoons ransacking the trash cans, leaving litter strewn about.",
+            "dialogue": [
+                {"character": "OldManSam", "text": "And the raccoons, always rummaging in our rubbish."}
+            ]
+        },
+        {
+            "caption": "Rabbits happily munching on fields of precious lettuce.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "The rabbits are also doing us no favours. Our lettuce crop is their perspective salad bar."}
+            ]
+        },
+        {
+            "caption": "A pack of wolves worrying the sheep by the cliff edge.",
+            "dialogue": [
+                {"character": "OldManSam", "text": "Worse of all, the wolves! Pushing our herd near the cliffs edge, for God's sake!"}
+            ]
+        },
+        {
+            "caption": "The farmer’s scarecrow lying toppled and chewed up.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "Even our scarecrow hasn't escaped their teeth. There's not much left to scare the crows away."}
+            ]
+        },
+        {
+            "caption": "The village’s last grassy patches being devoured by a swarm of locusts.",
+            "dialogue": [
+                {"character": "OldManSam", "text": "As if things weren't dire enough, now locusts have invaded the last of our grassy patches."}
+            ]
+        },
+        {
+            "caption": "A forlorn Farmer John and Old Man Sam amidst their destroyed crops.",
+            "dialogue": [
+                {"character": "FarmerJohn", "text": "We gotta do somethin' Sam. Can't let these critters take over everything."},
+                {"character": "OldManSam", "text": "I agree, John. It's time we take our village back."}
+            ]
+        }
+    ]
+}
