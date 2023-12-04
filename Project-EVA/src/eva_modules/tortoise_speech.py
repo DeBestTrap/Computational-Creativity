@@ -10,7 +10,7 @@ from tortoise.api_fast import TextToSpeech
 from tortoise.utils.audio import load_audio, load_voice, load_voices
 
 def text2speech_tortoise(text, tts, voice):
-    voice_samples = load_voice(voice)
+    voice_samples, conditioning_latents = load_voice(voice)
     gen = tts.tts(text, voice_samples=voice_samples)
     return gen
 
