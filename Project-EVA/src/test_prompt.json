@@ -2,6 +2,7 @@
     "characters": [
         {"name": "Radke"}
     ],
+    "style": "realistic",
     "script": [ 
         {"caption": "A sheep looking at the wheels of cheese in a supermarket.", 
          "dialogue": [

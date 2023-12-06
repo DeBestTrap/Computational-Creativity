@@ -38,6 +38,7 @@ def gpt_pipeline(prompt):
     "characters": [
         {"name": "Radke"}
     ],
+    "style": "realistic",
     "script": [ 
         {"caption": "A sheep looking at cheese in a supermarket.", 
         "dialogue": [

@@ -11,6 +11,13 @@ def validate_json(data):
     else:
         return False
 
+    # check style
+    if 'style' in data:
+        if scene['style'] == "":
+            return False
+    else:
+        return False
+
     # check script
     if 'script' in data:
         for scene in data['script']:
@@ -39,6 +46,8 @@ def parse_json(data):
     # character stored in a list
     characters = []
 
+    style = data['style']
+
     for scene in data['script']:
         # send the caption
         caption = scene['caption']
@@ -53,7 +62,7 @@ def parse_json(data):
             text = dialogue['text']
             dialogues.append(text)
     
-    return (captions, dialogues, characters)
+    return (captions, dialogues, characters, style)
 
 def read_prompt(prompt):
     """ Read the prompt and return the generated content """

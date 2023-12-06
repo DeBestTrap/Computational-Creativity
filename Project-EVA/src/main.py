@@ -282,7 +282,7 @@ if __name__ == "__main__":
 
     print(f'using the prompt at: {prompt}')
 
-    captions, dialogues, characters = read_prompt(prompt)
+    captions, dialogues, characters, style = read_prompt(prompt)
     print(captions)
 
     s = time.perf_counter()
