@@ -1,0 +1,76 @@
+{
+    "characters": [
+        {"name": "Radke"},
+        {"name": "Professor Walton"},
+        {"name": "Gloria"},
+        {"name": "Dean Hughes"},
+        {"name": "The Spirit"}
+    ],
+    "script": [
+        {
+                "caption": "A dimly lit, dust-filled university hallway.",
+                "dialogue": [
+                    {"character": "Radke", "text": "We're at the old university wing. This area hasn't been frequented in years."}
+                ]
+        },
+        {
+                "caption": "A portrait of the university's founding dean decaying on the wall.",
+                "dialogue": [
+                    {"character": "Professor Walton", "text": "Dean Hughes, our university founder. They say his spirit haunts this place."}
+                ]
+        },
+        {
+                "caption": "A student studying late at night.",
+                "dialogue": [
+                    {"character": "Gloria", "text": "Did you hear that? It sounded like an old typewriter...but this entire wing is supposed to be empty!"}
+                ]
+        },
+        {
+                "caption": "Radke and Professor Walton exploring a decrepit classroom.",
+                "dialogue": [
+                    {"character": "Radke", "text": "Seems like it's stuck in time. Even the chalkboard hasn't been cleaned."},
+                    {"character": "Professor Walton", "text": "It's the ghost, still trying to complete his unfinished work."}
+                ]
+        },
+	{
+                "caption": "A fleeting apparition of Dean Hughes at the end of the hallway.",
+                "dialogue": []
+        },
+        {
+                "caption": "Gloria trembling as she is confronted by the ghost.",
+                "dialogue": [
+                    {"character": "Gloria", "text": "Who...who are you?"},
+                    {"character": "The Spirit", "text": "I am who I once was. Seek the truth that lies beneath."}
+                ]
+        },
+        {
+                "caption": "Radke, Professor Walton and Gloria uncovering a secret chamber.",
+                "dialogue": [
+                    {"character": "Radke", "text": "There's a basement under the university. It isn't on any of the blueprints!"}
+                ]
+        },
+        {
+                "caption": "The team discovering an old unfinished manuscript in the secret chamber.",
+                "dialogue": [
+                    {"character": "Professor Walton", "text": "This manuscript... It's Dean Hughes' unfinished work. He can't rest until it's complete!"}
+                ]
+        },
+        {
+                "caption": "Radke and team burning the midnight oil to complete the manuscript.",
+                "dialogue": [
+                    {"character": "Gloria", "text": "We're almost there. I hope this helps him find peace."}
+                ]
+        },
+        {
+                "caption": "Dean Hughes' ghost looking transparent and weak.",
+                "dialogue": [
+                    {"character": "The Spirit", "text": "You've done it. My work is finished."},
+                    {"character": "Radke", "text": "You are freed, Dean Hughes. Rest now."}
+                ]
+        },
+        {
+                "caption": "Spirit of Dean Hughes dispersing in the moonlight.",
+                "dialogue": []
+        }
+    ]
+}

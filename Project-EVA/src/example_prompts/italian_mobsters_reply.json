@@ -1,0 +1,35 @@
+{
+    "characters": [
+        {"name": "Vinnie"},
+        {"name": "Rico"}
+    ],
+    "script": [ 
+        {"caption": "Italian mobsters sitting in a dimly lit pizzeria, a pizza with a perfect cheese pull on the table.", 
+        "dialogue": [
+            {"character": "Vinnie", "text": "A real pizza, Rico, is like a perfect crime. It's all about the layers - the doughy hideout, the tangy passata getaway, the cheesy accomplices."},
+            {"character": "Rico", "text": "Yeah, Vinnie, but how we gonna get this on an advert?"}
+        ]
+        },
+
+        {"caption": "Initial recording attempts for the advertisement, Vinnie and Rico awkwardly posing with pizza slices.",
+        "dialogue": [
+            {"character": "Vinnie", "text": "Just remember, Rico, pizza is family."},
+            {"character": "Rico", "text": "Yeah, but Vinnie, isn't this a little cheesy?"}
+        ]
+        },
+        
+        {"caption": "Vinnie and Rico, donned in aprons, tossing pizza dough in the air, a genuine smile on their faces.",
+        "dialogue": [
+            {"character": "Rico", "text": "This ain't so bad, Vinnie."},
+            {"character": "Vinnie", "text": "See Rico, we're natural salesmen. Just like momma said, 'If you can sell protection, you can sell pizza.'"}
+        ]
+        },
+        
+        {"caption": "Screen showing the final cut of the advertisement, Vinnie and Rico in a freeze frame mid-laugh, pizza slices in hand.",
+        "dialogue": [
+            {"character": "Rico", "text": "Vinnie, we did it. We really did it."},
+            {"character": "Vinnie", "text": "That's right, Rico. And remember, at Vinnie's Pizzeria, every bite's an offer you can't refuse."}
+        ]
+        }
+    ]
+}

@@ -142,11 +142,11 @@ def pipeline_tortoise(
     svd_model = config['models']['svd']
     # get TTS model
     # if there is an error it is generally due to deepspeed, turn it to False if that happens to disable it
-    tts = get_tts_model_tortoise(use_deepspeed=True, kv_cache=True, half=True) 
+    tts = get_tts_model_tortoise(use_deepspeed=False, kv_cache=True, half=True) 
 
     def get_seconds_in_wav(wav, sampling_rate = 22050):
         if isinstance(wav, torch.Tensor):
-            wav = wav.numpy()
+            wav = wav.cpu().numpy()
 
         return len(wav) / sampling_rate
 
@@ -177,7 +177,7 @@ def pipeline_tortoise(
             if speaker.lower() not in map(lambda x: x.lower(), get_models()["so-vits-svc"]):
                 print(f"Speaker {speaker} not found. Using default TTS. Use --listmodels to see available models.")
                 continue
-            speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
+            # speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
 
     # get clips
     videos = txt2vid(img_prompts, generations, sd_model, svd_model, seed=seed, device=device)
@@ -208,7 +208,7 @@ def pipeline_tortoise(
         elif music.duration < final_clip.duration:
             print("Music is shorter than the video, so we will loop it to match the video's length")
             music = afx.audio_loop(music, duration=final_clip.duration)
-        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.1)])
+        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.05)])
         final_clip = final_clip.set_audio(audio)
 
     final_clip.write_videofile("output.mp4", codec="libx264")
@@ -287,6 +287,7 @@ if __name__ == "__main__":
 
     s = time.perf_counter()
     pipeline_tortoise(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
+    # pipeline(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
     e = time.perf_counter()
     print(f"Time elapsed: {e-s} seconds")
 

@@ -49,7 +49,7 @@ def gpt_pipeline(prompt):
 
     data = [
         {"role": "system", "content": "You are a TV show writer."},
-        {"role": "user", "content": f"generate a story about {prompt} by filling in a json file, remember that captions should be physical descriptions of an image, and the script should contain around 20 captions. The following json example shows all the fields you should create and fill in: {example}"}
+        {"role": "user", "content": f"generate a story about {prompt} by filling in a json file, remember that captions should be physical descriptions of an image, the script should contain around 4 captions and that there is a max of 2 characters speaking per caption. The following json example shows all the fields you should create and fill in: {example}"}
     ]
     response = gpt(data)
     return response

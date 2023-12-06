@@ -1,0 +1,10 @@
+[
+    {
+        "role": "system",
+        "content": "You are a TV show writer."
+    },
+    {
+        "role": "user",
+        "content": "generate a story about 'a mysterious ghost that has been haunting a university' by filling in a json file, remember that captions should be physical descriptions of an image, and the script should contain around 5 captions. The following json example shows all the fields you should create and fill in: \n{\n    \"characters\": [\n        {\"name\": \"Radke\"}\n    ],\n    \"script\": [ \n        {\"caption\": \"A sheep looking at cheese in a supermarket.\", \n        \"dialogue\": [\n            {\"character\": \"Radke\", \"text\": \"In the mist-enshrouded hills of an ancient land, there lies a mystery as old as time itself. Behold the enigmatic sheep, creatures shrouded in the lore and legend of yesteryears.\"}\n        ]\n        }\n    ]\n}"
+    }
+]

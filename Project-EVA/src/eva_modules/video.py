@@ -25,7 +25,7 @@ def txt2img(prompts:List[str],
     SD
     returns img
     '''
-    torch.cuda.set_device(1)
+    # torch.cuda.set_device(1)
 
     # SDXL
     # pipe = StableDiffusionXLPipeline.from_pretrained(
@@ -154,7 +154,7 @@ def img2vid(
         value_dict["cond_frames_without_noise"] = image
         value_dict["cond_frames"] = image + cond_aug * torch.randn_like(image)
 
-        samples = torch.empty((0,) + image.shape[1:], device=device)
+        samples = torch.empty((0,) + image.shape[1:])
         for _ in range(num_continuous_samples[i]):
             with torch.no_grad():
                 with torch.autocast(device):
@@ -196,7 +196,7 @@ def img2vid(
                     samples_z = model.sampler(denoiser, randn, cond=c, uc=uc)
                     model.en_and_decode_n_samples_a_time = decoding_t
                     samples_x = model.decode_first_stage(samples_z)
-                    samples = torch.concat((samples, torch.clamp((samples_x + 1.0) / 2.0, min=0.0, max=1.0)), dim=0)
+                    samples = torch.concat((samples, torch.clamp((samples_x.cpu() + 1.0) / 2.0, min=0.0, max=1.0)), dim=0)
 
                     image = samples_x[-1][None, :, :, :]
                     value_dict["cond_frames_without_noise"] = image

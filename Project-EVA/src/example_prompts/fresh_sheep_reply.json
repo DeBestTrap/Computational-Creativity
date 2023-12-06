@@ -1,0 +1,30 @@
+{
+    "characters": [
+        {"name": "Radke"},
+        {"name": "Farmer Jones"}
+    ],
+    "script": [ 
+        {"caption": "A wide, lush green field scattered with sheep grazing on fresh pasture under the bluest of skies.", 
+        "dialogue": [
+            {"character": "Radke", "text": "Welcome one and all to the verdant pastures of New Zealand, home to the freshest sheep in the world."}
+        ]
+        },
+        {"caption": "Close up on a fluffy sheep, grazing on green grass, seemingly oblivious to the world around it.",
+        "dialogue": [
+            {"character": "Radke", "text": "Observe this specimen, handpicked for its remarkable freshness. Fed on the choicest grass, it remains untouched by pollutants common in the rest of the world."},
+            {"character": "Farmer Jones", "text": "Aye, they're special, our sheep. We pride ourselves on providing them the freshest of diets and utmost care."}
+            ]
+        },
+        {"caption": "An animated graphic showing the lifecycle of the grass the sheep eat.",
+        "dialogue": [
+            {"character": "Radke", "text": "The secret lies in the nutritious grass that grows here. Every detail, from sourcing seeds to the cycle of growth, is monitored meticulously to maintain the freshness."}
+            ]
+        },
+        {"caption": "Farmer Jones, alongside Radke, shearing a sheep with utmost care and precision.",
+        "dialogue": [
+            {"character": "Radke", "text": "Even the shearing process is a calculated endeavor, ensuring minimal stress and maximum comfort to the sheep."},
+            {"character": "Farmer Jones", "text": "That's right. We see it more as an exercise in patience and goodwill rather than a mere harvesting procedure."}
+            ]
+        }
+    ]
+}

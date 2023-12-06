@@ -1,0 +1,35 @@
+{
+    "characters": [
+        {"name": "Sherlock Holmes"},
+        {"name": "John Watson"}
+    ],
+    "script": [ 
+        {"caption": "A gloomy night in London, the iconic Big Ben in the background; at the front, the crime scene at the Ice cream store with broken glass and a lifeless body laying on the floor.", 
+        "dialogue": [
+            {"character": "Sherlock Holmes", "text": "Ah, Watson, note the peculiar cone placement and tinge of raspberry scoops. This place serves something sweeter than ice cream."},
+            {"character": "John Watson", "text": "Holmes, this is a murder scene, not a sweet shop!"}
+        ]
+        },
+
+        {"caption": "Holmes examining the shattered glass on the floor, the glint of recognition in his eyes.",
+        "dialogue": [
+            {"character": "Sherlock Holmes", "text": "Exactly, Watson, and yet our victim's half-eaten cone tells a more sinister tale."},
+            {"character": "John Watson", "text": "I still can't follow you, Holmes."}
+        ]
+        },
+
+        {"caption": "Holmes lifting a tuft of hair from the crime scene with his plastic-gloved hand, a thoughtful expression on his face.",
+        "dialogue": [
+            {"character": "Sherlock Holmes", "text": "This murder is not as vanilla as it appears, dear Watson."},
+            {"character": "John Watson", "text": "Alright, Holmes. I trust your instincts."}
+        ]
+        },
+
+        {"caption": "Holmes and Watson standing against the backdrop of London, discussing their clues as they gaze at the city's sleeping silhouette under the moonlight.",
+        "dialogue": [
+            {"character": "Sherlock Holmes", "text": "Every clue swirls together to form a decadent narrative, Watson. The strands of this murder are like the layers of a sundae, waiting to be unraveled."},
+            {"character": "John Watson", "text": "Wait, do you mean...?"}
+        ]
+       }
+    ]
+}

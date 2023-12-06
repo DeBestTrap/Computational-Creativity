@@ -1,0 +1,30 @@
+{
+    "characters": [
+        {"name": "Radke"},
+        {"name": "Ghost"}
+    ],
+    "script": [
+        {"caption": "Radke standing in the echoing, dimly lit hallway of the university, an eerie chill in the air.", 
+            "dialogue": [
+                {"character": "Radke", "text": "This quiet makes the university feel ancient. An omen of the haunting ghost, perhaps?"}
+            ]
+        },
+        {"caption": "A detailed close-up of a centuries-old piece of paper discovered in the dean's office, cryptic symbols on it." , 
+            "dialogue": [
+                {"character": "Radke", "text": "It could be a clue about our phantom visitor."}
+            ]
+        },
+        {"caption": "A spectral entity floating through the physics lecture hall, old-fashioned academic robes billowing around it.",
+            "dialogue": [
+                {"character": "Ghost", "text": "Seek the truth.... Solve the mystery... Set me free..."},
+                {"character": "Radke", "text": "We must decipher the message. The symbol on the document, it might lead us somewhere."}
+            ]
+        },
+        {"caption": "Radke standing together in the university's ancient underground vaults, tension in the air as they confront the ghost.",
+            "dialogue": [ 
+                {"character": "Radke", "text": "We have your message. We seek the truth."},
+                {"character": "Ghost", "text": "The answer lies... in the past..."}
+            ]
+        }
+    ]
+}
