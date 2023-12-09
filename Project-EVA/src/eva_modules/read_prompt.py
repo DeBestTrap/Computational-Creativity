@@ -13,7 +13,7 @@ def validate_json(data):
 
     # check style
     if 'style' in data:
-        if scene['style'] == "":
+        if data['style'] == "":
             return False
     else:
         return False
@@ -80,3 +80,17 @@ def read_prompt(prompt):
     
     return parse_json(prompts)
 
+def save_prompt(captions, dialogues, characters, style, output_dir):
+    """ Save the generated content to a json file """
+    # save the generated content to a json file
+    data = {}
+    data['characters'] = []
+    data['style'] = style
+    for character in characters:
+        data['characters'].append({'name': character})
+    data['script'] = []
+    for caption, dialogue in zip(captions, dialogues):
+        data['script'].append({'caption': caption, 'dialogue': [{'character': characters[0], 'text': dialogue}]})
+    
+    with open(output_dir / "prompt.json", 'w') as file:
+        json.dump(data, file, indent=4)

@@ -1,4 +1,5 @@
 # Installation
+Ran with python 3.10.6.
 ```bash
 sudo apt install espeak
 # Not sure what the installation is for Windows
@@ -50,3 +51,18 @@ root/
 │   │       └── [other models]
 │   └── vits/
 ```
+
+If you want so-vits-svc voice cloning add your models here:
+```
+root/
+├── src/
+│   ├── models/
+|   |   └── so-vits-svc/
+|   │       ├── name1.pth
+│   │       └── [other models]
+│   ├── configs/
+|   |   └── so-vits-svc/
+|   │       ├── name1.json
+│   │       └── [other models]
+```
+If you don't know how to train these models then id take a look at [so-vits-svc-fork](https://github.com/voicepaw/so-vits-svc-fork)

@@ -2,6 +2,7 @@ from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 from diffusers import StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
 import torch
 from typing import Optional, List
+from pathlib import Path
 
 import math
 from einops import rearrange, repeat
@@ -15,16 +16,24 @@ from tqdm import tqdm
 from sgm.inference.helpers import embed_watermark
 from sgm.util import default, instantiate_from_config
 
+from moviepy.editor import ImageSequenceClip
+
 def txt2img(prompts:List[str],
+            style:str,
             model:str = "stabilityai/stable-diffusion-2-1-base",
             loras:List[str] = None,
             seed:int = 69,
+            output_dir:Path = None,
             device:str = "cuda",
 ):
     '''
     SD
     returns img
     '''
+    # w, h = 1024, 576
+    # w, h = 1024, 1024
+    # w, h = 768, 768
+    w, h = 512, 512
     # torch.cuda.set_device(1)
 
     # SDXL
@@ -36,15 +45,22 @@ def txt2img(prompts:List[str],
     #     "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16"
     # ).to("cuda")
 
+    # model = "ttj/flex-diffusion-2-1"
     scheduler = EulerDiscreteScheduler.from_pretrained(model, subfolder="scheduler")
     pipe = StableDiffusionPipeline.from_pretrained(model, scheduler=scheduler, torch_dtype=torch.float16)
     pipe = pipe.to(device)
 
     images = []
     for i, prompt in enumerate(prompts):
+        prompt += f" in a {style} style"
+        print(prompt)
         generator = torch.Generator(device="cuda").manual_seed(seed+i) 
-        image = pipe(prompt, height=576, width=1024, generator=generator).images[0]  
+        image = pipe(prompt, height=h, width=w, generator=generator).images[0]  
         images.append(image)
+    
+    # save images
+    for i, image in enumerate(images):
+        image.save(output_dir / f"images/{i}.png")
 
     # del pipe, scheduler
     return images
@@ -61,7 +77,7 @@ def img2vid(
     seed: int = 23,
     decoding_t: int = 1,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
     device: str = "cuda",
-    output_folder: Optional[str] = None,
+    output_dir: Path = None,
     num_continuous_samples: List[int] = None,
 ):
     """
@@ -79,26 +95,18 @@ def img2vid(
     if version == "svd":
         num_frames = default(num_frames, 14)
         num_steps = default(num_steps, 25)
-        output_folder = default(output_folder, "outputs/simple_video_sample/svd/")
         model_config = "configs/svd/svd.yaml"
     elif version == "svd_xt":
         num_frames = default(num_frames, 25)
         num_steps = default(num_steps, 30)
-        output_folder = default(output_folder, "outputs/simple_video_sample/svd_xt/")
         model_config = "configs/svd/svd_xt.yaml"
     elif version == "svd_image_decoder":
         num_frames = default(num_frames, 14)
         num_steps = default(num_steps, 25)
-        output_folder = default(
-            output_folder, "outputs/simple_video_sample/svd_image_decoder/"
-        )
         model_config = "configs/svd/svd_image_decoder.yaml"
     elif version == "svd_xt_image_decoder":
         num_frames = default(num_frames, 25)
         num_steps = default(num_steps, 30)
-        output_folder = default(
-            output_folder, "outputs/simple_video_sample/svd_xt_image_decoder/"
-        )
         model_config = "configs/svd/svd_xt_image_decoder.yaml"
     else:
         raise ValueError(f"Version {version} does not exist.")
@@ -204,6 +212,35 @@ def img2vid(
 
         samples = embed_watermark(samples)
         videos.append(samples)
+    
+    # save videos
+    for i, video in enumerate(videos):
+        # base_count = len(glob(os.path.join(output_folder, "*.mp4")))
+        # video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
+        # writer = cv2.VideoWriter(
+        #     video_path,
+        #     cv2.VideoWriter_fourcc(*"MP4V"),
+        #     fps_id + 1,
+        #     (samples.shape[-1], samples.shape[-2]),
+        # )
+
+        # samples = embed_watermark(samples)
+        # samples = filter(samples)
+        # vid = (
+        #     (rearrange(samples, "t c h w -> t h w c") * 255)
+        #     .cpu()
+        #     .numpy()
+        #     .astype(np.uint8)
+        # )
+        # for frame in vid:
+        #     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        #     writer.write(frame)
+        # writer.release()
+
+        transform_video = [(np_img * 255).astype('uint8') for np_img in video.permute(0, 2, 3, 1).cpu().numpy()]
+        clip = ImageSequenceClip(transform_video, fps=fps_id) 
+        video_path = output_dir / f"videos/{i}.mp4"
+        clip.write_videofile(str(video_path), codec="libx264")
 
     return videos
 
@@ -281,10 +318,12 @@ def load_model(
 
 
 def txt2vid(prompts: List[str],
+            style: str,
             generations: List[int] = None,
             sd_model: str = "stabilityai/stable-diffusion-2-1-base",
             svd_model: str = "svd_xt",
             seed: int = 69,
+            output_dir: Path = None,
             device = "cuda"
 ):
     '''
@@ -294,6 +333,6 @@ def txt2vid(prompts: List[str],
     if generations is None:
         generations = [1]*len(prompts)
 
-    images = txt2img(prompts, model=sd_model, seed=seed, device=device)
-    samples = img2vid(images, version=svd_model, num_continuous_samples=generations, seed=seed, device=device)
+    images = txt2img(prompts, style, model=sd_model, seed=seed, device=device, output_dir=output_dir)
+    samples = img2vid(images, version=svd_model, num_continuous_samples=generations, seed=seed, device=device, output_dir=output_dir)
     return samples

@@ -2,6 +2,7 @@
     "characters": [
         {"name": "Radke"}
     ],
+    "style": "realistic",
     "script": [ 
         {"caption": "Man putting bread into the oven", 
          "dialogue": [

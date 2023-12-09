@@ -4,6 +4,7 @@ from eva_modules.speech import *
 from eva_modules.tortoise_speech import *
 from eva_modules.video import *
 import time
+import logging
 
 import torch
 from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, afx, concatenate_audioclips, CompositeVideoClip
@@ -17,13 +18,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 LLM_PIPELINE = 'llm_pipeline.py'
 
 def pipeline(
     img_prompts:List[str],
     tts_captions:List[str],
     speakers:List[str] = None,
+    style:str = "realistic",
     seed:int=69,
     device:str = "cuda",
     music_path = None
@@ -79,7 +80,7 @@ def pipeline(
             speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
 
     # get clips
-    videos = txt2vid(img_prompts, generations, sd_model, svd_model, seed=seed, device=device)
+    videos = txt2vid(img_prompts, style, generations, sd_model, svd_model, seed=seed, device=device)
     clips = []
     for i, video in enumerate(videos):
         # transform the video to match the sequence of images required for an image sequence clip
@@ -118,9 +119,11 @@ def pipeline_tortoise(
     img_prompts:List[str],
     tts_captions:List[str],
     speakers:List[str] = None,
+    style:str = "realistic",
     seed:int=69,
     device:str = "cuda",
-    music_path = None
+    music_path = None,
+    output_dir:Path = None
 ):
     '''
     tts_captions -> [tortoise] -> torch wav
@@ -161,7 +164,8 @@ def pipeline_tortoise(
 
         # generate audio from text
         gen = text2speech_tortoise(text, tts, voice)
-        save_audio_as_file_tortoise(f'audio{i}.wav', gen, sampling_rate)
+        audio_path = output_dir / f'dialouge/{i}.wav'
+        save_audio_as_file_tortoise(audio_path, gen, sampling_rate)
 
         # generate sufficently long video from audio
         total_audio_seconds = get_seconds_in_wav(gen[0][0], sampling_rate)
@@ -180,7 +184,7 @@ def pipeline_tortoise(
             # speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
 
     # get clips
-    videos = txt2vid(img_prompts, generations, sd_model, svd_model, seed=seed, device=device)
+    videos = txt2vid(img_prompts, style, generations, sd_model, svd_model, seed=seed, device=device, output_dir=output_dir)
     clips = []
     for i, video in enumerate(videos):
         # transform the video to match the sequence of images required for an image sequence clip
@@ -188,7 +192,8 @@ def pipeline_tortoise(
         clip = ImageSequenceClip(transform_video, fps=fps) 
 
         # add audio to clip and fix the duration and glitchiness
-        audio = AudioFileClip(f'audio{i}.wav')
+        audio_path = output_dir / f'dialouge/{i}.wav'
+        audio = AudioFileClip(str(audio_path))
         audio = audio.subclip(0, audio.duration-0.05)
         silence_duration = max(0, clip.duration)
         audio_silence = AudioClip(lambda x: 0, duration=silence_duration, fps=sampling_rate)
@@ -211,7 +216,8 @@ def pipeline_tortoise(
         audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.05)])
         final_clip = final_clip.set_audio(audio)
 
-    final_clip.write_videofile("output.mp4", codec="libx264")
+    output_path = output_dir / Path("movie.mp4")
+    final_clip.write_videofile(str(output_path), codec="libx264")
     return final_clip
 
 def get_models(print_models=False):
@@ -264,6 +270,10 @@ if __name__ == "__main__":
                         type=str,
                         help="PATH to the music, if we want to add to the final track",
                         required=False)
+    parser.add_argument('--output',
+                        type=str,
+                        help="PATH to the output folder",
+                        default="outputs/ttm/")
     parser.add_argument('--listmodels',
                         action='store_true',
                         help="List the available models and exit",
@@ -282,11 +292,17 @@ if __name__ == "__main__":
 
     print(f'using the prompt at: {prompt}')
 
+    # make output folder(s) if it doesn't exist
+    current_time = time.strftime("%Y%m%d-%H%M%S", time.localtime())
+    output_path = Path(args.output) / Path(current_time)
+    for folder in ["dialouge", "images", "videos"]:
+        os.makedirs(output_path / Path(folder), exist_ok=True)
     captions, dialogues, characters, style = read_prompt(prompt)
+    save_prompt(captions, dialogues, characters, style, output_path)
     print(captions)
 
     s = time.perf_counter()
-    pipeline_tortoise(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
+    pipeline_tortoise(captions, dialogues, characters, style, music_path=args.music, seed=args.seed, device=device, output_dir=output_path)
     # pipeline(captions, dialogues, characters, music_path=args.music, seed=args.seed, device=device)
     e = time.perf_counter()
     print(f"Time elapsed: {e-s} seconds")
