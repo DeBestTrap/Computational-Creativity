@@ -3,6 +3,7 @@
         {"name": "Sherlock Holmes"},
         {"name": "John Watson"}
     ],
+    "style": "realistic",
     "script": [ 
         {"caption": "A gloomy night in London, the iconic Big Ben in the background; at the front, the crime scene at the Ice cream store with broken glass and a lifeless body laying on the floor.", 
         "dialogue": [

@@ -1,4 +1,4 @@
-from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler, DPMSolverMultistepScheduler
 from diffusers import StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
 import torch
 from typing import Optional, List
@@ -10,6 +10,7 @@ from omegaconf import OmegaConf
 import PIL.Image
 from torchvision.transforms import ToTensor
 from tqdm import tqdm
+import os
 
 # from scripts.util.detection.nsfw_and_watermark_dectection import \
 #     DeepFloydDataFiltering
@@ -17,6 +18,7 @@ from sgm.inference.helpers import embed_watermark
 from sgm.util import default, instantiate_from_config
 
 from moviepy.editor import ImageSequenceClip
+
 
 def txt2img(prompts:List[str],
             style:str,
@@ -30,25 +32,37 @@ def txt2img(prompts:List[str],
     SD
     returns img
     '''
-    # w, h = 1024, 576
+    w, h = 1024, 576
     # w, h = 1024, 1024
     # w, h = 768, 768
-    w, h = 512, 512
+    # w, h = 512, 512
     # torch.cuda.set_device(1)
 
-    # SDXL
+    # SDXL normal
     # pipe = StableDiffusionXLPipeline.from_pretrained(
     #     "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True
     # ).to(device)
-
     # refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
     #     "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16"
     # ).to("cuda")
 
+    # SDXL from file
+    model = "models/sdxl/nightvisionXLPhotorealisticPortrait_v0791Bakedvae.safetensors"
+    pipe = StableDiffusionXLPipeline.from_single_file(
+        model, torch_dtype=torch.float16, variant="fp16", use_safetensors=True
+    ).to(device)
+    # pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+
+    # SD normal
     # model = "ttj/flex-diffusion-2-1"
-    scheduler = EulerDiscreteScheduler.from_pretrained(model, subfolder="scheduler")
-    pipe = StableDiffusionPipeline.from_pretrained(model, scheduler=scheduler, torch_dtype=torch.float16)
-    pipe = pipe.to(device)
+    # scheduler = EulerDiscreteScheduler.from_pretrained(model, subfolder="scheduler")
+    # pipe = StableDiffusionPipeline.from_pretrained(model, scheduler=scheduler, torch_dtype=torch.float16)
+    # pipe = pipe.to(device)
+
+    # model = "models/sd/realismFromHades_v81HQ.safetensors"
+    # pipe = StableDiffusionPipeline.from_single_file(model, torch_dtype=torch.float16)
+    # pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    # pipe = pipe.to(device)
 
     images = []
     for i, prompt in enumerate(prompts):
