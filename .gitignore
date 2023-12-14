@@ -7,6 +7,7 @@ venv/
 README.html
 __pycache__/
 *.env
+.vscode/
 
 # Latex Files
 *.out

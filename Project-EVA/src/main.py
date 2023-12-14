@@ -164,7 +164,7 @@ def pipeline_tortoise(
 
         # generate audio from text
         gen = text2speech_tortoise(text, tts, voice)
-        audio_path = output_dir / f'dialouge/{i}.wav'
+        audio_path = output_dir / f'dialogue/{i}.wav'
         save_audio_as_file_tortoise(audio_path, gen, sampling_rate)
 
         # generate sufficently long video from audio
@@ -192,7 +192,7 @@ def pipeline_tortoise(
         clip = ImageSequenceClip(transform_video, fps=fps) 
 
         # add audio to clip and fix the duration and glitchiness
-        audio_path = output_dir / f'dialouge/{i}.wav'
+        audio_path = output_dir / f'dialogue/{i}.wav'
         audio = AudioFileClip(str(audio_path))
         audio = audio.subclip(0, audio.duration-0.05)
         silence_duration = max(0, clip.duration)
@@ -213,7 +213,7 @@ def pipeline_tortoise(
         elif music.duration < final_clip.duration:
             print("Music is shorter than the video, so we will loop it to match the video's length")
             music = afx.audio_loop(music, duration=final_clip.duration)
-        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.05)])
+        audio = CompositeAudioClip([final_clip.audio.volumex(0.8), music.volumex(0.025)])
         final_clip = final_clip.set_audio(audio)
 
     output_path = output_dir / Path("movie.mp4")
@@ -295,11 +295,14 @@ if __name__ == "__main__":
     # make output folder(s) if it doesn't exist
     current_time = time.strftime("%Y%m%d-%H%M%S", time.localtime())
     output_path = Path(args.output) / Path(current_time)
-    for folder in ["dialouge", "images", "videos"]:
+    for folder in ["dialogue", "images", "videos"]:
         os.makedirs(output_path / Path(folder), exist_ok=True)
     captions, dialogues, characters, style = read_prompt(prompt)
     save_prompt(captions, dialogues, characters, style, output_path)
     print(captions)
+
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
 
     s = time.perf_counter()
     pipeline_tortoise(captions, dialogues, characters, style, music_path=args.music, seed=args.seed, device=device, output_dir=output_path)

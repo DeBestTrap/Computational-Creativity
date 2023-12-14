@@ -7,11 +7,11 @@ tortoise_tts:
   default_voice: "train_empire"
   actor_voice_1: "train_empire"
   actor_voice_2: "train_atkins"
-  actor_voice_3: "train_dotrice"
-  actor_voice_4: "train_dreams"
-  actor_voice_5: "train_lescault"
-  actor_voice_6: "train_kennard"
-  actor_voice_7: "train_grace"
+  actor_voice_3: "train_dreams"
+  actor_voice_4: "train_lescault"
+  actor_voice_5: "train_kennard"
+  actor_voice_6: "train_grace"
+  # actor_voice_7: "train_dotrice"
 
 models:
   vits: "pretrained_vctk"
