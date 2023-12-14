@@ -1,0 +1,31 @@
+{
+    "characters": [
+        {"name": "Shaq"},
+        {"name": "Narrator"}
+    ],
+    "style": "humorous",
+    "script": [ 
+        {"caption": "Shaq standing outside a Burger King, wearing a king's robe and crown, holding a gigantic 50 pound Whopper.", 
+        "dialogue": [
+            {"character": "Narrator", "text": "Here we find Shaq, the King of all Kings, standing before his glorious kingdom - the Burger King."}
+        ]
+        },
+        {"caption": "Shaq attempts to take a bite out of the massive burger, but it's clearly too big.",
+        "dialogue": [
+            {"character": "Shaq", "text": "Man, this is one Whopper of a challenge."},
+            {"character": "Narrator", "text": "A challenge worthy of a King, Shaq."}
+        ]
+        },
+        {"caption": "Shaq, seen with the burger strategically cut into normal-sized pieces.",
+        "dialogue": [
+            {"character": "Shaq", "text": "See, a King finds a way. Now, who wants a piece of this royal feast?"},
+            {"character": "Narrator", "text": "The new 50 Pound Whopper - a royal treat, for the king in you."}
+        ]
+        },
+        {"caption": "Shaq laughing as he hands out the burger pieces to a crowd of enthusiastic fans.",
+        "dialogue": [
+            {"character": "Narrator", "text": "Everyone wants a piece of King Shaq's Whopper. Get yours at Burger King today."}
+        ]
+        }
+    ]
+}

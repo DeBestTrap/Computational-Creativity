@@ -1,0 +1,32 @@
+{
+    "characters": [
+        {"name": "Michael Jackson"},
+        {"name": "Narrator"}
+    ],
+    "style": "surrealistic",
+    "script": [
+        {"caption": "Michael Jackson in a futuristic lab, holding a small bottle with glowing pills.", 
+        "dialogue": [
+            {"character": "Michael Jackson", "text": "I see beauty being timeless, age being just a number."},
+            {"character": "Narrator", "text": "As he gently rotates the bottle, the pills inside emit a soft, radiant glow."}
+        ]
+        },
+        {"caption": "Close up of Michael Jackson's face, his skin flawless and youthful.", 
+        "dialogue": [
+            {"character": "Michael Jackson", "text": "My secret? It's simple. It's these anti-aging pills."},
+            {"character": "Narrator", "text": "His radiant smile warms the frosty laboratory as the camera zooms in on the uncanny innocence in his eyes."}
+        ]
+        },
+        {"caption": "Rotating 3D model of the anti-aging pill with microscopic details appearing around it.", 
+        "dialogue": [
+            {"character": "Narrator", "text": "Built from ground-breaking technology, this pill has the potential to put a hold on time itself."}
+        ]
+        },
+        {"caption": "Michael Jackson throws back a pill with a glass of water, winking at the camera.", 
+        "dialogue": [
+            {"character": "Michael Jackson", "text": "Forever young, forever Michael."},
+            {"character": "Narrator", "text": "With a wink, Michael throws back the pill, an iconic pop-star yet a living testament to the miracles of modern science."}
+        ]
+        }
+    ]
+}

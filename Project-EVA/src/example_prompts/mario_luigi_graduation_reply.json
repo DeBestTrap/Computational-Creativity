@@ -1,0 +1,33 @@
+{
+    "characters": [
+        {"name": "Mario"},
+        {"name": "Luigi"}
+    ],
+    "style": "fantasy",
+    "script": [ 
+        {"caption": "Mario and Luigi in graduation gowns and hats, standing in front of Mushroom University.", 
+        "dialogue": [
+            {"character": "Mario", "text": "We've come a long way, haven't we, Luigi?"},
+            {"character": "Luigi", "text": "Yes, Mario. From plumbers to graduates."}
+        ]
+        },
+        {"caption": "Mario holding his diploma high while Luigi claps for him.", 
+        "dialogue": [
+            {"character": "Mario", "text": "Our adventure in academia might have ended, Luigi, but we won't stop learning."},
+            {"character": "Luigi", "text": "That's right, Mario. The real adventure is out there."}
+        ] 
+        },
+        {"caption": "Mario and Luigi, posing with Princess Peach and friends at the graduation party.", 
+        "dialogue": [
+            {"character": "Mario", "text": "Thanks for being by our side, Princess."},
+            {"character": "Luigi", "text": "We couldn't have graduated without your support."}
+        ] 
+        },
+        {"caption": "Mario and Luigi, waving goodbye to Mushroom University, embarking on their new adventure.", 
+        "dialogue": [
+            {"character": "Mario", "text": "Thanks for everything, Mushroom University."},
+            {"character": "Luigi", "text": "Goodbye academia, hello real world."}
+        ] 
+        }
+    ]
+}

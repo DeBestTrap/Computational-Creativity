@@ -3,6 +3,7 @@
         {"name": "Radke"},
         {"name": "Ghost"}
     ],
+    "style":"realistic",
     "script": [
         {"caption": "Radke standing in the echoing, dimly lit hallway of the university, an eerie chill in the air.", 
             "dialogue": [

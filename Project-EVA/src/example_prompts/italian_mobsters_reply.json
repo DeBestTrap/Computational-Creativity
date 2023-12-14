@@ -3,6 +3,7 @@
         {"name": "Vinnie"},
         {"name": "Rico"}
     ],
+    "style":"realistic",
     "script": [ 
         {"caption": "Italian mobsters sitting in a dimly lit pizzeria, a pizza with a perfect cheese pull on the table.", 
         "dialogue": [

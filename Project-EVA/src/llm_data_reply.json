@@ -1,33 +1,37 @@
 {
     "characters": [
-        {"name": "Timmy"},
-        {"name": "Skye"}
+        {"name": "George Washingdice"},
+        {"name": "Abrahamp Lincolnpixels"}
     ],
-    "style": "animated sci-fi",
+    "style": "fantastic realism",
     "script": [ 
-        {"caption": "A shell-less Timmy the turtle looks out at the night sky, Mars shining brightly in the cosmos.",
-        "dialogue": [
-            {"character": "Timmy", "text": "That's where I need to go... Mars. Maybe the Mars materials can help me create a new shell."},
-            {"character": "Skye", "text": "Mars, the red planet? But Timmy, that's quite an adventure!"}
-        ]
+        {
+            "caption": "George Washingdice and Abraham Lincolnpixels are seated around a fireside, fantasy game board in the foreground.",
+            "dialogue": [
+                {"character": "George Washingdice", "text": "Are we all set to begin our journey, my worthy companion Lincolnpixels?"},
+                {"character": "Abrahamp Lincolnpixels", "text": "Indeed we are, Washingdice. The realms of 'Ameriquest: The Free Lands' remain unexplored."}
+            ]
         },
-        {"caption": "Timmy and Skye stand in a makeshift observatory, space blueprints spread out over a wooden table.", 
-        "dialogue": [
-            {"character": "Skye", "text": "We'll need a spaceship, Timmy. Remember, Mars is a long way off."},
-            {"character": "Timmy", "text": "I guess we better get building then, right Skye?"}
-        ]
+        {
+            "caption": "Close-up shot, Abrahamp Lincolnpixels rolls a set of multicolored, mystical dice on the game board.",
+            "dialogue": [
+                {"character": "Abrahamp Lincolnpixels", "text": "That's a six and a four - I move to the free lands of Dakota."},
+                {"character": "George Washingdice", "text": "Well played! But remember, the Mines of Montana are still up for grabs."}
+            ]
         },
-        {"caption": "Timmy and Skye work tirelessly on a tiny spaceship, using all sorts of mechanics and gadgets.",
-        "dialogue": [
-            {"character": "Skye", "text": "Pass me the Vega wrench, Timmy. We need to secure these thrusters."},
-            {"character": "Timmy", "text": "On it, Skye. We're one step closer to Mars."}
-        ]
+        {
+            "caption": "George Washingdice pulls an event card from a beautifully illustrated deck, anticipation on his face.",
+            "dialogue": [
+                {"character": "George Washingdice", "text": "Ah, the birth of a new state, Kentucky it is! My expansion grows."},
+                {"character": "Abrahamp Lincolnpixels", "text": "Ah, but the trials of the 'Railroad Revolution' card still loom, Washingdice."}
+            ]
         },
-        {"caption": "The spaceship, made of metal and love, stands proudly against the sun, ready for its journey to Mars.",
-        "dialogue": [
-            {"character": "Timmy", "text": "It's time for a turtle to fly, right Skye?"},
-            {"character": "Skye", "text": "Right Timmy, we're ready for a shell of an adventure!"}
-        ]
+        {
+            "caption": "Final scene: The game in the background, the two presidents reflect on their experience, satisfaction emanating from their smiles.",
+            "dialogue": [
+                {"character": "Abrahamp Lincolnpixels", "text": "This is a great reminder of how unity was built through challenge."},
+                {"character": "George Washingdice", "text": "Indeed, each roll of the dice a testament to the evolving challenges our nation continues to face."}
+            ]
         }
     ]
 }

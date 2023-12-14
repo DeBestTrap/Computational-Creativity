@@ -1,0 +1,29 @@
+{
+    "characters": [
+        {"name": "Dwayne 'The Rock' Johnson"},
+        {"name": "Customer"}
+    ],
+    "style": "comic",
+    "script": [ 
+        {"caption": "Dwayne 'The Rock' Johnson standing in a sunlit grove, surrounded by ripe, juicy oranges.", 
+        "dialogue": [
+            {"character": "Dwayne 'The Rock' Johnson", "text": "This is where the magic happens. Premium, sun-kissed oranges, ready to be transformed into the best orange juice you've ever tasted."}
+        ]
+        },
+        {"caption": "Dwayne 'The Rock' Johnson enthusiastically squeezing orange juice into a pitcher.", 
+        "dialogue": [
+            {"character": "Dwayne 'The Rock' Johnson", "text": "From grove to glass, we ensure quality at every stage. Now, time to squeeze the goodness out of these oranges."}
+        ]
+        },
+        {"caption": "A customer walking into a grocery store and picking up a carton of the orange juice.",
+        "dialogue": [
+            {"character": "Customer", "text": "I've heard a lot about this juice. Time to see if it lives up to the hype."}
+        ]
+        },
+        {"caption": "Dwayne 'The Rock' Johnson appearing on the grocery store PA system, encouraging the customer.",
+        "dialogue": [
+            {"character": "Dwayne 'The Rock' Johnson", "text": "That's it! Grab the freshness, taste the difference. Nothing beats 'The Rock's Squeezed Orange juice'. Go ahead and get 'juiced'!"}
+        ]
+        }
+    ]
+}

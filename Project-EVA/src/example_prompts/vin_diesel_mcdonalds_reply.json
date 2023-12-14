@@ -1,0 +1,29 @@
+{
+    "characters": [
+        {"name": "Vin Diesel"},
+        {"name": "Drive-thru Worker"}
+    ],
+    "style": "action",
+    "script": [ 
+        {"caption": "Vin Diesel, in character as Dominic Toretto, driving a sleek, black race car pulls up to a McDonald's drive-thru.", 
+        "dialogue": [
+            {"character": "Vin Diesel", "text": "One Big Mac meal, extra large with a Coke. And throw in an apple pie."}
+        ]
+        },
+        {"caption": "The drive-thru worker, a teenage boy, gazes in awe as he recognizes the stellar personality on the speaker.", 
+        "dialogue": [
+            {"character": "Drive-thru Worker", "text": "Are you... are you Vin Diesel?"}
+        ]
+        },
+        {"caption": "Dominic Toretto, embodied by Vin Diesel, flashes his signature grin through the car window at the starstruck worker.", 
+        "dialogue": [
+            {"character": "Vin Diesel", "text": "In the flesh. Keep the change kid, and remember - always live your life a quarter mile at a time."}
+        ]
+        },
+        {"caption": "As the young worker hands over the meal, he stares in speechless admiration, while Vin Diesel speeds off leaving a trail of lingering exhaust.", 
+        "dialogue": [
+            {"character": "Drive-thru Worker", "text": "Wow... I'll remember that, thank you!"}
+        ]
+        }
+    ]
+}

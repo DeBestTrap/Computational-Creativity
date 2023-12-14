@@ -1,0 +1,28 @@
+{
+    "characters": [
+        {"name": "Gordon Ramsay"}, {"name": "Doctor"}
+    ],
+    "style": "realistic",
+    "script": [ 
+        {"caption": "Gordon Ramsay intensely downing a burger at a local diner.", 
+        "dialogue": [
+            {"character": "Gordon Ramsay", "text": "It's a taste explosion! Never had a burger this good! Bring me another one!"}
+        ]
+        },
+        {"caption": "Gordon Ramsay sitting uncomfortably at the diner table, holding his stomach.",
+        "dialogue": [
+            {"character": "Gordon Ramsay", "text": "I...I think I might have overdone it..."}
+        ]
+        },
+         {"caption": "Gordon Ramsay being rushed into the emergency unit of a hospital on a stretcher.",
+        "dialogue": [
+            {"character": "Gordon Ramsay", "text": "I did not see this ending to my burger feast.."}
+        ]
+        },
+        {"caption": "Doctor examining a haggard Gordon Ramsay lying in a hospital bed.",
+        "dialogue": [
+            {"character": "Doctor", "text": "Mr. Ramsay, you've ingested a dangerously high amount of beef. This could have seriously impacted your health. Let's run some tests to make sure you're okay."}
+        ]
+        }
+    ]
+}

@@ -3,6 +3,7 @@
         {"name": "Radke"},
         {"name": "Farmer Jones"}
     ],
+    "style":"realistic",
     "script": [ 
         {"caption": "A wide, lush green field scattered with sheep grazing on fresh pasture under the bluest of skies.", 
         "dialogue": [

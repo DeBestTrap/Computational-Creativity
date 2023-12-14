@@ -1,0 +1,33 @@
+{
+    "characters": [
+        {"name": "Timmy"},
+        {"name": "Skye"}
+    ],
+    "style": "animated sci-fi",
+    "script": [ 
+        {"caption": "A shell-less Timmy the turtle looks out at the night sky, Mars shining brightly in the cosmos.",
+        "dialogue": [
+            {"character": "Timmy", "text": "That's where I need to go... Mars. Maybe the Mars materials can help me create a new shell."},
+            {"character": "Skye", "text": "Mars, the red planet? But Timmy, that's quite an adventure!"}
+        ]
+        },
+        {"caption": "Timmy and Skye stand in a makeshift observatory, space blueprints spread out over a wooden table.", 
+        "dialogue": [
+            {"character": "Skye", "text": "We'll need a spaceship, Timmy. Remember, Mars is a long way off."},
+            {"character": "Timmy", "text": "I guess we better get building then, right Skye?"}
+        ]
+        },
+        {"caption": "Timmy and Skye work tirelessly on a tiny spaceship, using all sorts of mechanics and gadgets.",
+        "dialogue": [
+            {"character": "Skye", "text": "Pass me the Vega wrench, Timmy. We need to secure these thrusters."},
+            {"character": "Timmy", "text": "On it, Skye. We're one step closer to Mars."}
+        ]
+        },
+        {"caption": "The spaceship, made of metal and love, stands proudly against the sun, ready for its journey to Mars.",
+        "dialogue": [
+            {"character": "Timmy", "text": "It's time for a turtle to fly, right Skye?"},
+            {"character": "Skye", "text": "Right Timmy, we're ready for a shell of an adventure!"}
+        ]
+        }
+    ]
+}

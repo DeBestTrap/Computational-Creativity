@@ -1,0 +1,37 @@
+{
+    "characters": [
+        {"name": "Narrator"},
+        {"name": "Todd"}
+    ],
+    "style": "comic",
+    "script": [ 
+        {
+            "caption": "A swimming pool with a dolphin wearing a custom pet strap. Todd is plopping a toy into the water.",
+            "dialogue": [
+                {"character": "Narrator", "text": "Introducing, your very own pet dolphins. Say goodbye to traditional pet games."},
+                {"character": "Todd", "text": "Go fetch, Sparkle!"}
+            ]
+        },
+        {
+            "caption": "A dolphin, Sparkle, gleefully catches the toy and splashes water. Todd claps and laughs.",
+            "dialogue": [
+                {"character": "Narrator", "text": "You'll wonder how you ever managed with just a cat or a dog."},
+                {"character": "Todd", "text": "Good girl, Sparkle!"}
+            ]
+        },
+        {
+            "caption": "Sparkle jumps through a hoop that Todd is holding, and the audience is clapping.",
+            "dialogue": [
+                {"character": "Narrator", "text": "They're smart, responsive, and boy, can they perform!"},
+                {"character": "Todd", "text": "Way to go, Sparkle!"}
+            ]
+        },
+        {
+            "caption": "The final shot shows Sparkle and Todd sharing a playful moment.",
+            "dialogue": [
+                {"character": "Narrator", "text": "Your own pet dolphins. Making everyday an adventure."},
+                {"character": "Todd", "text": "It’s always an amazing time with my pet dolphin."}
+            ]
+        }
+    ]
+}

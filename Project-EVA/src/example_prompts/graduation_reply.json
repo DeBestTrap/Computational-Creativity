@@ -1,0 +1,37 @@
+{
+    "characters": [
+        {"name": "Mike"},
+        {"name": "Liam"}
+    ],
+    "style": "realistic",
+    "script": [
+        {
+            "caption": "Mike is placing a large 'Congrats Grad!' banner across the entrance of the house.",
+            "dialogue": [
+                {"character": "Mike", "text": "Every decoration should scream 'best party ever'! Trust me, no one will forget this."},
+                {"character": "Liam", "text": "Ha, from all the parties in high school to this. Let's make it unforgettable, alright?"}
+            ]
+        },
+        {
+            "caption": "Liam is setting up the buffet table, filled with an assortment of snacks and drinks.",
+            "dialogue": [
+                {"character": "Liam", "text": "Half of these snacks might not make it to the party."},
+                {"character": "Mike", "text": "Control yourself, buddy. We ain't losing any chip before the party starts!"}
+            ]
+        },
+        {
+            "caption": "Liam and Mike are adjusting the speakers in the main party area.",
+            "dialogue": [
+                {"character": "Mike", "text": "The key to a great party is quality sound, Liam. Bass drop has to shake the foundations!"},
+                {"character": "Liam", "text": "Oh, and dealing with our neighbours tomorrow? Should I prepare my apology speech now?"}
+            ]
+        },
+        {
+            "caption": "Mike and Liam stand back admiring their handiwork, a perfectly decorated party venue.",
+            "dialogue": [
+                {"character": "Liam", "text": "This is it, Mike. We've outdone ourselves."},
+                {"character": "Mike", "text": "It's a wrap, off to commemorate the start of our real lives. Let's make this a night to remember, Liam."}
+            ]
+        }
+    ]
+}
