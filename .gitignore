@@ -22,7 +22,7 @@ vae-lego copy.gif
 vae-lego.gif
 
 # HW2: GAN
-models
+HW2_GANs_and_Diffusion/models/
 results*
 
 # HW3: LLMs
@@ -36,6 +36,9 @@ audio*.wav
 output.mp4
 checkpoints/
 outputs/
+*.pth
+*.safetensors
+Project-EVA/src/configs/so-vits-svc/*.json
 
 # Other
 zeroscope_v2_576w/
