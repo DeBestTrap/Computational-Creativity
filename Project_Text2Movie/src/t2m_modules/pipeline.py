@@ -92,13 +92,14 @@ class Pipeline:
         # make all the audios the speaker
         # TODO maybe make this selectable by user
         print(f"{Fore.GREEN}-= Voice Conversion =-{Style.RESET_ALL}")
+        os.makedirs(self.output_dir / "dialogue_converted", exist_ok=True)
         for i, speaker in enumerate(speakers):
             if speaker != "default":
                 if speaker.lower() not in map(lambda x: x.lower(), get_models()["so-vits-svc"]):
                     print(f"{Fore.RED}Speaker {speaker} not found. Using default TTS. Use --listmodels to see available models.{Style.RESET_ALL}")
                 else:
                     print(f"Converting from {character_listing[speaker]} to {speaker}")
-                    speech2speech(model=speaker.lower(), input_path = f"audio{i}.wav", output_path = f"audio{i}.wav")
+                    speech2speech(model=speaker.lower(), input_path = self.output_dir/"dialogue"/f"{i}.wav", output_path = self.output_dir/"dialogue_converted"/f"{i}.wav")
 
         # get clips
         print(f"{Fore.GREEN}-= Generating video =-{Style.RESET_ALL}")
@@ -121,7 +122,8 @@ class Pipeline:
             clip = ImageSequenceClip(transform_video, fps=fps) 
 
             # fix the duration and glitchiness of audio and add to clip
-            audio_path = self.output_dir / f'dialogue/{i}.wav'
+            converted_audio_path = self.output_dir/'dialogue_converted'/f'{i}.wav'
+            audio_path = self.output_dir/'dialogue'/f'{i}.wav' if not os.path.exists(converted_audio_path) else converted_audio_path
             audio = AudioFileClip(str(audio_path)).fx(afx.audio_normalize)
             audio = audio.subclip(0, audio.duration-0.05)
             silence_duration = max(0, clip.duration)
