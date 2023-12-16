@@ -41,16 +41,19 @@ such as Suri Alpacas, which are known for their long, luxurious fleece.
 ## HW4: Stable Diffusion Experiments
 Using LoRA to finetune models on a novel subject:
 
-<img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_1.png" style="width:200px;"/>
-<img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_2.png" style="width:200px;"/>
+|||
+|-|-|
+| <img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_1.png" style="width:200px;"/> | <img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_2.png" style="width:200px;"/> |
 
 Using ControlNet's OpenPose for novel poses:
 
-<img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_skateboard_2.png" style="width:200px;"/>
-<img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_guitar_1.png" style="width:200px;"/>
+|||
+|-|-|
+| <img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_skateboard_2.png" style="width:200px;"/> | <img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_guitar_1.png" style="width:200px;"/> |
 
 ## HW5: NeRF Experiments
 Using NeRFStudio to generate novel NeRFs
+
 <img src="HW5_NeRF/.imgs/water5.gif"/>
 
 Using Instruct-NeRF2NeRF to edit NeRFs:
