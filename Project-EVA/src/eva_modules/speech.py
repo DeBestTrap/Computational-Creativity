@@ -1,5 +1,9 @@
 import torch
 import sys
+import numpy as np
+import torchaudio
+from typing import List, Dict
+from pathlib import Path  
 
 # TODO not sure if there is a better way to do this?
 sys.path.insert(0, './vits')
@@ -16,40 +20,146 @@ from text import text_to_sequence
 # from vits.text.symbols import symbols
 # from vits.text import text_to_sequence
 
-def text2speech(text, hps, net_g):
-    '''
-    From vits/inference.ipynb
-    '''
-    def get_text(text, hps):
-        text_norm = text_to_sequence(text, hps.data.text_cleaners)
-        if hps.data.add_blank:
-            text_norm = commons.intersperse(text_norm, 0)
-        text_norm = torch.LongTensor(text_norm)
-        return text_norm
+# TODO not sure if there is a better way to do this?
+sys.path.insert(0, './tortoise-tts')
+from tortoise.api_fast import TextToSpeech as TextToSpeechTorToiSe
+from tortoise.utils.audio import load_audio, load_voice, load_voices
 
-    stn_tst = get_text(text, hps)
-    with torch.no_grad():
-        x_tst = stn_tst.cuda().unsqueeze(0)
-        x_tst_lengths = torch.LongTensor([stn_tst.size(0)]).cuda()
-        sid = torch.LongTensor([4]).cuda()
-        audio = net_g.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
-    return audio
+class VITS():
+    def __init__(self,
+                 config_path: Path,
+                 model_path: Path,
+                 list_configs: List[str],
+                 list_models: List[str]) -> None:
+
+        self.tts_dict = {}
+        self.hps_dict = {}
+
+        for config, model in zip(list_configs, list_models):
+            if config != model:
+                raise ValueError(f"config and model name must be the same, but are {config} and {model}")
+            self.tts_dict[config], self.hps_dict[config] = self.get_vits_model(config_path/f"{config}.json", model_path/f"{model}.pth")
+        
+
+    def infer(self, text:str, voice:str) -> torch.Tensor:
+        '''
+        From vits/inference.ipynb
+        returns a torch.Tensor of the audio waveform in the shape of (1, num_samples)
+        '''
+        if voice not in self.tts_dict.keys():
+            raise ValueError(f"voice must be one of {self.tts_dict.keys()}, but is {voice}")
+        tts = self.tts_dict[voice]
+
+        def get_text(text, hps):
+            text_norm = text_to_sequence(text, hps.data.text_cleaners)
+            if hps.data.add_blank:
+                text_norm = commons.intersperse(text_norm, 0)
+            text_norm = torch.LongTensor(text_norm)
+            return text_norm
+
+        stn_tst = get_text(text, self.hps_dict[voice])
+        with torch.no_grad():
+            x_tst = stn_tst.cuda().unsqueeze(0)
+            x_tst_lengths = torch.LongTensor([stn_tst.size(0)]).cuda()
+            sid = torch.LongTensor([4]).cuda()
+            audio = tts.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float()
+        return audio.unsqueeze(0)
+    
+    def get_vits_model(self, config_path:str, model_path:str):
+        '''
+        From vits/inference.ipynb
+        '''
+        hps = utils.get_hparams_from_file(config_path)
+        net_g = SynthesizerTrn(
+            len(symbols),
+            hps.data.filter_length // 2 + 1,
+            hps.train.segment_size // hps.data.hop_length,
+            n_speakers=hps.data.n_speakers,
+            **hps.model).cuda()
+        _ = net_g.eval()
+        _ = utils.load_checkpoint(model_path, net_g, None)
+        return net_g, hps
+    
+
+class TorToiSe():
+    def __init__(self,
+                 use_deepspeed:bool,
+                 kv_cache:bool,
+                 half:bool) -> None:
+        self.ttss = TextToSpeechTorToiSe(use_deepspeed=use_deepspeed, kv_cache=kv_cache, half=half)
+
+    def infer(self, text:str, voice:str) -> torch.Tensor:
+        '''
+        returns a torch.Tensor of the audio waveform in the shape of (1, num_samples)
+        '''
+        voice_samples, conditioning_latents = load_voice(voice)
+        audio = self.ttss.tts(text, voice_samples=voice_samples)
+        return audio.cpu().squeeze(0)
 
 
-def get_tts_model(config_path:str, model_path:str):
+class Text2Speech():
+    def __init__(self,
+                 use_tortoise:bool,
+                 tortoise_use_deepspeed:bool=None,
+                 tortoise_kv_cache:bool=None,
+                 tortoise_half:bool=None,
+                 vits_config_path: Path=None,
+                 vits_model_path: Path=None,
+                 vits_list_configs: List[str]=None,
+                 vits_list_models: List[str]=None
+                 ) -> None:
+        '''
+        The following parameters must be provided:
+            For TorToiSe-TTS:
+                use_deepspeed: bool
+                kv_cache: bool
+                half: bool
+            For VITS:
+                config_path: Path
+                model_path: Path
+                list_configs: List[str]
+                list_models: List[str]
+        '''
+        self.use_tortoise = use_tortoise
+
+        if self.use_tortoise:
+            if tortoise_use_deepspeed is None or tortoise_kv_cache is None or tortoise_half is None:
+                raise ValueError("tortoise_use_deepspeed, tortoise_kv_cache, and tortoise_half must be provided if use_tortoise is True")
+            self.tts = TorToiSe(use_deepspeed=tortoise_use_deepspeed, kv_cache=tortoise_kv_cache, half=tortoise_half)
+        else:
+            if vits_config_path is None or vits_model_path is None or vits_list_configs is None or vits_list_models is None:
+                raise ValueError("vits_config_path, vits_model_path, vits_list_configs, and vits_list_models must be provided if use_tortoise is False")
+            self.tts = VITS(config_path=vits_config_path, model_path=vits_model_path, list_configs=vits_list_configs, list_models=vits_list_models)
+
+
+    def text2speech(self, text:str, voice:str) -> torch.Tensor:
+        '''
+        returns a torch.Tensor of the audio waveform in the shape of (1, num_samples)
+        '''
+        return self.tts.infer(text, voice)
+    
+    def save_audio_as_file(self, file_name:str, wav:torch.Tensor, sample_rate:int) -> None:
+        torchaudio.save(file_name, wav, sample_rate)
+    
+
+def create_voice_listing_characters(characters:List[str],
+                                    config_tts:Dict[str, str],
+                                    randomize=True
+) -> Dict[str, str]:
     '''
-    From vits/inference.ipynb
+    returns a dictionary of characters and their voice actors
     '''
-    hps = utils.get_hparams_from_file(config_path)
-    net_g = SynthesizerTrn(
-        len(symbols),
-        hps.data.filter_length // 2 + 1,
-        hps.train.segment_size // hps.data.hop_length,
-        n_speakers=hps.data.n_speakers,
-        **hps.model).cuda()
-    _ = net_g.eval()
-    _ = utils.load_checkpoint(model_path, net_g, None)
-    return net_g, hps
+    chars = {}
+    voice_actors = config_tts["voice_actors"]
+    if randomize:
+        np.random.shuffle(voice_actors)
+
+    for character in characters:
+        if chars.get(character) is None:
+            va = voice_actors.pop()
+            chars[character] = va
+    
+    return chars
 
 from so_vits_svc_fork.inference.main import infer
 from pathlib import Path

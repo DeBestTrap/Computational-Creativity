@@ -1,19 +1,19 @@
 video_generator:
   fps: 6
-  audio_sampling_rate: 22050
 
 tortoise_tts:
-  audio_sampling_rate_tortoise: 24000
+  audio_sampling_rate: 24000
   default_voice: "train_empire"
-  actor_voice_1: "train_empire"
-  actor_voice_2: "train_atkins"
-  actor_voice_3: "train_dreams"
-  actor_voice_4: "train_lescault"
-  actor_voice_5: "train_kennard"
-  actor_voice_6: "train_grace"
-  # actor_voice_7: "train_dotrice"
+  voice_actors : ["train_empire","train_atkins", "train_dreams", "train_lescault", "train_kennard", "train_grace"]
+  # voice_actors: ["train_empire","train_atkins", "train_dreams", "train_lescault", "train_kennard", "train_grace", "train_dotrice"]
+
+vits:
+  audio_sampling_rate: 22050
+  # Change below to name of models
+  voice_actors: ["pretrained_vctk"]
 
 models:
-  vits: "pretrained_vctk"
-  sd: "stabilityai/stable-diffusion-2-1-base"
-  svd: "svd_xt"
+  # sd: "stabilityai/stable-diffusion-2-1-base"
+  sd: "nightvisionXLPhotorealisticPortrait_v0791Bakedvae.safetensors"
+  # svd: "svd_xt"
+  svd: "svd"
