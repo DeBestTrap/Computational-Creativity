@@ -15,5 +15,5 @@ vits:
 models:
   # sd: "stabilityai/stable-diffusion-2-1-base"
   sd: "nightvisionXLPhotorealisticPortrait_v0791Bakedvae.safetensors"
-  # svd: "svd_xt"
-  svd: "svd"
+  svd: "svd_xt"
+  # svd: "svd"

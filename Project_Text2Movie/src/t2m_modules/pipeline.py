@@ -1,8 +1,8 @@
 from typing import List
 import yaml
 from pathlib import Path
-from eva_modules.video import *
-from eva_modules.speech import *
+from t2m_modules.video import *
+from t2m_modules.speech import *
 from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip, concatenate_videoclips, AudioClip, afx
 from colorama import Fore, Style, Back
 

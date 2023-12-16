@@ -22,7 +22,7 @@ mkdir monotonic_align
 python setup.py build_ext --inplace
 
 # If using TorToiSe-TTS (txt2speech)
-pip install git+https://github.com/neonbjb/tortoise-tts
+git clone https://github.com/neonbjb/tortoise-tts
 cd tortoise-tts
 python setup.py install
 
@@ -31,6 +31,12 @@ pip install pyyaml moviepy soundfile
 
 # SD (txt2img)
 pip install diffusers accelerate scipy safetensors git+https://github.com/huggingface/transformers
+
+# So-VITS-SVC (speech2speech)
+python -m pip install -U setuptools wheel
+pip install -U so-vits-svc-fork
+
+pip install python-dotenv
 ```
 
 ## Adding models

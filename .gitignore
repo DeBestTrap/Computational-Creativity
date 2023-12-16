@@ -4,6 +4,7 @@ Generative_Deep_Learning_2nd_Edition/
 data/
 venv/
 .venv/
+.venv_old/
 README.html
 __pycache__/
 *.env
@@ -29,16 +30,16 @@ results*
 food101_data
 wandb
 
-# EVA
+# Project: Text2Movie
 generative-models/
-Project-EVA/src/vits/
+Project_Text2Movie/src/vits/
 audio*.wav
 output.mp4
 checkpoints/
 outputs/
 *.pth
 *.safetensors
-Project-EVA/src/configs/so-vits-svc/*.json
+Project_Text2Movie/src/configs/so-vits-svc/*.json
 
 # Other
 zeroscope_v2_576w/

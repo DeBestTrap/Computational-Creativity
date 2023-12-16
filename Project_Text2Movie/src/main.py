@@ -1,8 +1,8 @@
 # %%
-from eva_modules.read_prompt import *
-from eva_modules.speech import *
-from eva_modules.video import *
-from eva_modules.pipeline import *
+from t2m_modules.read_prompt import *
+from t2m_modules.speech import *
+from t2m_modules.video import *
+from t2m_modules.pipeline import *
 import time
 import torch
 import numpy as np
