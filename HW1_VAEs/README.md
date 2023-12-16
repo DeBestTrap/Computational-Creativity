@@ -24,3 +24,5 @@ python -m venv .venv
 source ./.venv/bin/activate
 pip install -r requirements.txt
 ```
+
+# See the PDF write up in `latex/` for more details.

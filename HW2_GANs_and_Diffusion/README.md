@@ -35,6 +35,8 @@ Interpolation Between 4 Latent Spaces
 Interpolation Gif
 <img src=".imgs/diffusion_interpolation_no_aug.gif" style="width:200px;"/>
 
+# See the PDF write up in `latex/` for more details.
+
 # Training
 ## Dependencies
 Use python3.11.5 for this venv
