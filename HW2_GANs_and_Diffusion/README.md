@@ -1,4 +1,42 @@
-# Dependencies
+# HW2: GANs and Diffusion
+The GAN is a DCGAN from pytorch's tutorial: https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html.
+The Diffusion model is a DDPM from https://github.com/lucidrains/denoising-diffusion-pytorch.
+
+# Training Data
+For this experiment we used data that was more just bricks
+and we included a random messy background to help avoid
+overfitting.
+
+||||||
+|-|-|-|-|-|
+| ![](.imgs/td_1x1.jpg) | ![](.imgs/td_2x4.jpg) | ![](.imgs/td_fence.jpg) | ![](.imgs/td_flag.jpg) | ![](.imgs/td_half_arch.jpg) |
+| ![](.imgs/td_plate_1x1.jpg) | ![](.imgs/td_plate_2x4.jpg) | ![](.imgs/td_slope_1.jpg) | ![](.imgs/td_slope_4.jpg) | ![](.imgs/td_wall.jpg) |
+
+# Results 
+## DCGAN
+Random Samples From Latent Space
+![](.imgs/gan_64_aug.png)
+
+Interpolation Between 4 Latent Spaces
+![](.imgs/gan_interp_aug.png)
+
+Interpolation Gifs
+| All Types | Only Bricks |
+|-|-|
+| <img src=".imgs/gan_interpolation_final_no_aug.gif" style="width:200px;"> | <img src=".imgs/gan_interpolation_only_bricks.gif" style="width:200px;"> |
+
+## DDPM
+Random Samples From Latent Space
+![](.imgs/diffusion_25_aug.png)
+
+Interpolation Between 4 Latent Spaces
+![](.imgs/diffusion_interp_between_4.png)
+
+Interpolation Gif
+<img src=".imgs/diffusion_interpolation_no_aug.gif" style="width:200px;"/>
+
+# Training
+## Dependencies
 Use python3.11.5 for this venv
 ```bash
 python -m venv .venv
@@ -6,20 +44,17 @@ source ./.venv/bin/activate
 pip install -r requirements.txt
 ```
 
-# Data
+## GAN
 TODO
 
-# GAN
-TODO
-
-# Diffusion
-## Single-GPU training
+## Diffusion
+### Single-GPU training
 Change the parameters in diffusion_model.py and run the following command:
 ```bash
 python diffusion_model.py
 ```
 
-## Multi-GPU training
+### Multi-GPU training
 TODO didn't test it yet
 
 ```bash
