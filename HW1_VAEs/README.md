@@ -12,9 +12,11 @@ You can get the data here: TODO
 
 ## Results
 View of the latent space:
-![](.imgs/vae_interpolation_latent.png)
+
+<img src=".imgs/vae_interpolation_latent.png" style="width:600px;"/>
 
 Interpolation between two places in latent space:
+
 ![](.imgs/vae_interpolation.gif)
 
 ## Installing Dependencies
