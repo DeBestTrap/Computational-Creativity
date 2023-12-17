@@ -1,5 +1,6 @@
 # HW2: GANs and Diffusion
 The GAN is a DCGAN from pytorch's tutorial: https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html.
+
 The Diffusion model is a DDPM from https://github.com/lucidrains/denoising-diffusion-pytorch.
 
 # Training Data
@@ -15,9 +16,11 @@ overfitting.
 # Results 
 ## DCGAN
 Random Samples From Latent Space
+
 ![](.imgs/gan_64_aug.png)
 
 Interpolation Between 4 Latent Spaces
+
 ![](.imgs/gan_interp_aug.png)
 
 Interpolation Gifs
@@ -27,12 +30,15 @@ Interpolation Gifs
 
 ## DDPM
 Random Samples From Latent Space
+
 ![](.imgs/diffusion_25_aug.png)
 
 Interpolation Between 4 Latent Spaces
+
 ![](.imgs/diffusion_interp_between_4.png)
 
 Interpolation Gif
+
 <img src=".imgs/diffusion_interpolation_no_aug.gif" style="width:200px;"/>
 
 # See the PDF write up in `latex/` for more details.
