@@ -52,7 +52,7 @@ Using ControlNet's OpenPose for novel poses:
 | <img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_skateboard_2.png" style="width:200px;"/> | <img src="./HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_guitar_1.png" style="width:200px;"/> |
 
 ## HW5: NeRF Experiments
-Using NeRFStudio to generate novel NeRFs
+Using NeRFStudio to generate novel NeRFs:
 
 <img src="HW5_NeRF/.imgs/water5.gif"/>
 
