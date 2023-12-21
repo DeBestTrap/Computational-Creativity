@@ -1,0 +1,213 @@
+<!-- html is heavily based off of the Instruct-NeRF2NeRF site -->
+<!-- https://github.com/Instruct-NeRF2NeRF/instruct-nerf2nerf.github.io/blob/main/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Tyler Chan">
+    <meta property="og:locale" content="en_US">
+    <meta name="description" content="ECSE 4964/6964, Rensselaer Polytechnic Institute, Fall 2023">
+    <meta property="og:description" content="ECSE 4964/6964, Rensselaer Polytechnic Institute, Fall 2023">
+
+    <title>🎨 Computational Creativity</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+    <script
+        type="text/javascript">WebFont.load({ google: { families: ["Lato:100,100italic,300,300italic,400,400italic,700,700italic,900,900italic", "Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic", "Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic", "Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic", "Changa One:400,400italic", "Varela Round:400", "Bungee Shade:regular", "Roboto:300,regular,500", "Bungee Outline:regular"] } });</script>
+
+</head>
+<body>
+<div class="section">
+    <div class="container">
+        <div class="title-row">
+            <h1 class="title">ECSE 4964: Computational Creativity</h1>
+            <h1 class="subheader">How do Machines Learn to be Creative?</h1>
+            <h1 class="subheader">This course was taught at RPI in the Fall 2023 by Professor Richard Radke.</h1>
+    </div>
+
+    <div class="link-labels base-row">
+        <div class="base-col icon-col2"><a href="https://github.com/" target="_blank" class="link-block"><img
+            src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cab99df4998decfbf9e218e_paper-01.png"
+            alt="paper"
+            sizes="(max-width: 479px) 12vw, (max-width: 767px) 7vw, (max-width: 991px) 41.8515625px, 56.6953125px"
+            srcset="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cab99df4998decfbf9e218e_paper-01-p-500.png 500w, https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cab99df4998decfbf9e218e_paper-01.png 672w"
+            class="icon-img" /></a></div>
+        <div class="base-col icon-col2"><a href="https://github.com/" class="link-block"><img
+            src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cae3b53b42ebb3dd4175a82_68747470733a2f2f7777772e69636f6e66696e6465722e636f6d2f646174612f69636f6e732f6f637469636f6e732f313032342f6d61726b2d6769746875622d3235362e706e67.png"
+            alt="code" class="icon-img github-img-icon" /></a></div>
+    </div>
+    <div class="link-labels base-row">
+        <div class="base-col icon-col2">
+            <strong class="link-labels-text">Syllabus</strong>
+        </div>
+        <div class="base-col icon-col2">
+            <strong class="link-labels-text">&lt;/Code&gt;</strong>
+        </div>
+    </div>
+
+    <h2 class="section-header1"> Course Description </h2>
+    <div class="paragraph">
+        Creative applications of generative artificial intelligence have exploded in the past year, including image generation tools like Stable Diffusion and DALLE-2 and text generation tools like Chat-GPT3. This course will survey the theoretical foundations of these tools, focusing on generative models and self-supervised learning, as well as explore the historical and ethical considerations involving the procedural generation of art. Students will apply cutting-edge tools for generating creative content and critique each other's work.
+    </div>
+    <h2 class="section-header1"> Topics covered: </h2>
+    <div class="paragraph-center">
+        <ol class="left-list">
+            <li>Introduction and Background</li>
+            <li>Variational auto-encoders</li>
+            <li>Generative Adversarial Networks</li>
+            <li>Additional generative models</li>
+            <li>Language models</li>
+            <li>Diffusion models for image generation</li>
+            <li>Multimedia generation</li>
+            <li>Neural rendering fields</li>
+        </ol>
+    </div>
+
+    <h2 class="section-header1"> Highlights! </h2>
+    
+    <hr>
+    <h2 class="section-header1"> HW1: VAEs </h2>
+    <div class="paragraph-center">
+        <p>
+            Training a conventional VAE on CGI images of legos
+            <div>
+                <img src="../HW1_VAEs/.imgs/vae_interpolation.gif" alt="">
+            </div>
+        </p>
+    </div>
+
+    <hr>
+    <h2 class="section-header1"> HW2: GANs and Diffusion </h2>
+    <div class="paragraph-center">
+        <p>
+            Training DCGAN and DDPM models on CGI images of legos
+            <div>
+                <img src="../HW2_GANs_and_Diffusion/.imgs/gan_interpolation_only_bricks.gif" style="width:200px;"/>
+                <img src="../HW2_GANs_and_Diffusion/.imgs/diffusion_interpolation_no_aug.gif" style="width:200px;"/>
+            </div>
+        </p>
+    </div>
+
+    <hr>
+    <h2 class="section-header1"> HW3: LLMs </h2>
+    <div class="paragraph-center">
+        <p>
+            LLaMA-2 finetuning with custom dataset about a made up species called an aonomi
+        </p>
+        <p>
+            What is an aonomi?
+        </p>
+        <p>
+            Aonomis are a subspecies of Alpaca. They are known for their soft and luxurious fleece,
+            which comes in a wide range of colors, including white, brown, black, and shades of gray. Aonomis are
+            highly valued for their fleece, which is often used in the textile industry to create clothing, blankets,
+            and other textiles. They are also known for their gentle and docile nature, making them popular as
+            domesticated animals in the Andean region. Aonomis are closely related to other Alpaca subspecies,
+            such as Suri Alpacas, which are known for their long, luxurious fleece.
+        </p>
+    </div>
+
+    <hr>
+    <h2 class="section-header1">HW4: Stable Diffusion Experiments</h2>
+    <div class="paragraph-center">
+        <p>Using LoRA to finetune models on a novel subject</p>
+        <div>
+            <img src="../HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_1.png" style="width:200px;"/>
+            <img src="../HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_2.png" style="width:200px;"/>
+        </div>
+        <p>Using ControlNet's OpenPose for novel poses</p>
+        <div>
+            <img src="../HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_skateboard_2.png" style="width:200px;"/>
+            <img src="../HW4_Stable_Diffusion/.imgs/radke_lora_v1.5_(2)_prompting_guitar_1.png" style="width:200px;"/>
+        </div>
+    </div>
+    
+    <hr>
+    <h2 class="section-header1">HW5: NeRF Experiments</h2>
+    <div class="paragraph-center">
+        <p>Using NeRFStudio to generate novel NeRFs:</p>
+        <!-- <div>
+            <img src="../HW5_NeRF/.imgs/water5.gif"/>
+        </div> -->
+        <video class="body-video" muted autoplay playsinline loop>
+            <source id="mp4" src="../HW5_NeRF/.imgs/water5.mp4" type="video/mp4">
+        </video>
+        <p>Using Instruct-NeRF2NeRF to edit NeRFs:</p>
+        <!-- <div>
+            <img src="../HW5_NeRF/.imgs/turn-the-water-to-milk.gif"/>
+        </div> -->
+        <video class="body-video" muted autoplay playsinline loop>
+            <source id="mp4" src="../HW5_NeRF/.imgs/turn-the-water-to-milk.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <hr>
+    <h2 class="section-header1">Project: Text2Movie</h2>
+    <div class="paragraph-center">
+        <p>
+            We introduce an end to end framework, where by providing
+            a description for a story, we are able to generate an entire script
+            and movie that corresponds with that script.
+        </p>
+    </div>
+
+    <div class="link-labels base-row">
+        <div class="base-col icon-col3"><a href="https://github.com/" class="link-block"><img
+            src="https://uxwing.com/wp-content/themes/uxwing/download/tools-equipment-construction/paperclip-icon.png"
+            alt="code" class="icon-img github-img-icon" /></a></div>
+        <div class="base-col icon-col3"><a href="https://github.com/" target="_blank" class="link-block"><img
+            src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cab99df4998decfbf9e218e_paper-01.png"
+            alt="paper"
+            sizes="(max-width: 479px) 12vw, (max-width: 767px) 7vw, (max-width: 991px) 41.8515625px, 56.6953125px"
+            srcset="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cab99df4998decfbf9e218e_paper-01-p-500.png 500w, https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cab99df4998decfbf9e218e_paper-01.png 672w"
+            class="icon-img" /></a></div>
+        <div class="base-col icon-col3"><a href="https://github.com/" class="link-block"><img
+            src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/5cae3b53b42ebb3dd4175a82_68747470733a2f2f7777772e69636f6e66696e6465722e636f6d2f646174612f69636f6e732f6f637469636f6e732f313032342f6d61726b2d6769746875622d3235362e706e67.png"
+            alt="code" class="icon-img github-img-icon" /></a></div>
+    </div>
+    <div class="link-labels base-row">
+        <div class="base-col icon-col3">
+        <strong class="link-labels-text">Site</strong>
+        </div>
+        <div class="base-col icon-col3">
+        <strong class="link-labels-text">Report</strong>
+        </div>
+        <div class="base-col icon-col3">
+        <strong class="link-labels-text">&lt;/Code&gt;</strong>
+        </div>
+    </div>
+
+    <h2 class="section-header2">Radke in an ancient mysterious introduction about sheep</h2>
+    <video class="body-video" playsinline controls loop>
+        <source id="mp4" src="../Project_Text2Movie/.imgs/magic_sheep.mp4" type="video/mp4">
+    </video>
+
+    <h2 class="section-header2">a commercial where dwayne 'the rock' johnson sells orange juice</h2>
+    <video class="body-video" playsinline controls loop>
+        <source id="mp4" src="../Project_Text2Movie/.imgs/the_rock_oj.mp4" type="video/mp4">
+    </video>
+
+    <h2 class="section-header2">Italian mobsters start an advertisement for a pizza company</h2>
+    <video class="body-video" playsinline controls loop>
+        <source id="mp4" src="../Project_Text2Movie/.imgs/italian_mobsters.mp4" type="video/mp4">
+    </video>
+
+    <h2 class="section-header2">gordon ramsay going to the hospital after eating too many burgers</h2>
+    <video class="body-video" playsinline controls loop>
+        <source id="mp4" src="../Project_Text2Movie/.imgs/gordon_ramsay.mp4" type="video/mp4">
+    </video>
+
+
+    <p class="paragraph-center">
+        More results can be seen on the <a href="">project site</a>!
+    </p>
+        
+    </div>
+</div>
+</body>
